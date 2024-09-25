@@ -1,4 +1,5 @@
 from django.shortcuts import render
+from .models import *
 
 # Create your views here.
 def homepage(request):
@@ -26,9 +27,9 @@ def contact_us(request):
     return render(request, 'main/contact_us.html')
 
 def downloads(request):
-
-    return render(request, 'main/downloads.html')
+    pdfs = DownloadMaterials.objects.all()
+    return render(request, 'main/downloads.html', {'pdfs': pdfs})
 
 def gallery(request):
-
-    return render(request, 'main/gallery.html')
+    gallery = Gallery.objects.all()
+    return render(request, 'main/gallery.html', {'gallery':gallery})

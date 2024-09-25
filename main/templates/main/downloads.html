@@ -6,6 +6,21 @@
 
 {% block content %}
 
+<div class="container py-5">
+    <h1>Download Materials</h1>
+<ul>
 
+    {% for pdf in pdfs %}
+        <li class="my-2">
+            <a style="color:green;margin-right:1.3rem;" href="{{ pdf.pdf.url }}" target="_blank">{{ pdf.title }}</a> <!-- This opens the PDF in a new tab -->
+            
+            <a style="color:rgb(0, 0, 0);" href="{{ pdf.pdf.url }}" class="btn btn-outline-success" download>Download</a> <!-- Download option -->
+        </li>
+    {% empty %}
+        <li>No Download materials available</li>
+    {% endfor %}
+
+</ul>
+</div>
 
 {% endblock %}

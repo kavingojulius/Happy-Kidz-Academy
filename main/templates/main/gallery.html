@@ -6,6 +6,81 @@
 
 {% block content %}
 
+<!-- Classes Start -->
+    <div class="container-xxl py-5">
+        <div class="container">
+            <div class="text-center mx-auto mb-5 wow fadeInUp" data-wow-delay="0.1s" style="max-width: 600px;">
+                <h1 class="mb-3">View our Gallery</h1>
+                <p>Eirmod sed ipsum dolor sit rebum labore magna erat. Tempor ut dolore lorem kasd vero ipsum sit eirmod sit. Ipsum diam justo sed rebum vero dolor duo.</p>
+            </div>
+            <div class="row g-4">
+                {% for images in gallery %}
+                <div class="col-lg-4 col-md-6 wow fadeInUp" data-wow-delay="0.1s">
+                    <div class="classes-item">
+                        <div class="bg-light w-90 mx-auto p-3">
+                            <img class="img-fluid" src="{{images.image.url}}" alt="">
+                        </div>
+                        <div class="bg-light rounded p-4 pt-5 mt-n5">
+                            <a class="d-block text-center h3 mt-3 mb-4" href="">{{images.title}}</a>                            
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
 
+                <!-- <div class="col-lg-4 col-md-6 wow fadeInUp" data-wow-delay="0.1s">
+                    <div class="classes-item">
+                        <div class="bg-light  w-90 mx-auto p-3">
+                            <img class="img-fluid " src="{% static 'media/classes-1.jpg' %}" alt="">
+                        </div>
+                        <div class="bg-light rounded p-4 pt-5 mt-n5">
+                            <a class="d-block text-center h3 mt-3 mb-4" href="">Art & Drawing</a>                            
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-lg-4 col-md-6 wow fadeInUp" data-wow-delay="0.1s">
+                    <div class="classes-item">
+                        <div class="bg-light  w-90 mx-auto p-3">
+                            <img class="img-fluid " src="{% static 'media/classes-1.jpg' %}" alt="">
+                        </div>
+                        <div class="bg-light rounded p-4 pt-5 mt-n5">
+                            <a class="d-block text-center h3 mt-3 mb-4" href="">Art & Drawing</a>                            
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-4 col-md-6 wow fadeInUp" data-wow-delay="0.1s">
+                    <div class="classes-item">
+                        <div class="bg-light  w-90 mx-auto p-3">
+                            <img class="img-fluid " src="{% static 'media/classes-1.jpg' %}" alt="">
+                        </div>
+                        <div class="bg-light rounded p-4 pt-5 mt-n5">
+                            <a class="d-block text-center h3 mt-3 mb-4" href="">Art & Drawing</a>                            
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-4 col-md-6 wow fadeInUp" data-wow-delay="0.1s">
+                    <div class="classes-item">
+                        <div class="bg-light w-90 mx-auto p-3">
+                            <img class="img-fluid " src="{% static 'media/classes-1.jpg' %}" alt="">
+                        </div>
+                        <div class="bg-light rounded p-4 pt-5 mt-n5">
+                            <a class="d-block text-center h3 mt-3 mb-4" href="">Art & Drawing</a>                            
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-4 col-md-6 wow fadeInUp" data-wow-delay="0.1s">
+                    <div class="classes-item">
+                        <div class="bg-light w-90 mx-auto p-3">
+                            <img class="img-fluid" src="{% static 'media/classes-1.jpg' %}" alt="">
+                        </div>
+                        <div class="bg-light rounded p-4 pt-5 mt-n5">
+                            <a class="d-block text-center h3 mt-3 mb-4" href="">Art & Drawing</a>                            
+                        </div>
+                    </div>
+                </div> -->
+            </div>
+        </div>
+    </div> 
+<!-- Classes End -->
 
 {% endblock %}
