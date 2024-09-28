@@ -7,3 +7,11 @@ class DownloadMaterialsAdmin(admin.ModelAdmin):
     list_display = ('title', 'uploaded_at')
 
 admin.site.register(Gallery)
+
+class EventAdmin(admin.ModelAdmin):
+    list_display = ('title', 'start_time', 'end_time', 'is_event_active')
+
+admin.site.register(Event, EventAdmin)
+
+
+

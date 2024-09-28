@@ -4,6 +4,9 @@
     --light: #FFF5F3;
     --dark: #103741;
 }
+body{
+    font-size: 1.2rem;
+}
 
 .back-to-top {
     position: fixed;
@@ -66,7 +69,7 @@ h4,
 .display-4,
 .display-5,
 .display-6 {
-    font-family: 'Lobster Two', cursive;
+    font-family: 'san-seriff', cursive;
     font-weight: 700;
 }
 
@@ -83,15 +86,18 @@ h6,
 
 
 /*** Navbar ***/
+.navbar{
+    padding: 30px;
+}
 
 .navbar-nav {
     align-items: center;
 }
 
 .navbar .navbar-nav .nav-link {
-    padding: 30px 15px;
+    padding: 15px 20px;
     color: var(--dark);
-    font-weight: 500;
+    font-weight: 900;
     outline: none;
 }
 
@@ -118,6 +124,8 @@ h6,
 .navbar .dropdown-toggle[aria-expanded=true]::after {
     transform: rotate(-180deg);
 }
+
+
 
 @media (max-width: 991.98px) {
     .navbar .navbar-nav .nav-link  {
@@ -173,6 +181,7 @@ h6,
         font-size: 30px;
         font-weight: 600;
     }
+   
 }
 
 .header-carousel .owl-nav {

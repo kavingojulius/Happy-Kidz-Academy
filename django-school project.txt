@@ -1,0 +1,44 @@
+cental
+scholar
+newspaper
+podtalk
+kidder
+****themewagon site****
+
+******* content ********
+
+
+You'll make both the front and Back end of a junior school's web app. https://www.facebook.com/share/qycatvBG9eEpZBRW/?mibextid=qi2Omg
+
+
+Here are key functionalities.
+1. Parents Portal
+2. Contact Form
+3. News feed
+4. Resource Page
+
+PARENT'S PORTAL
+- A username and password is provided by the admin, (username could be the child's admission number or otherwise)
+- The parent can view their fee statements and download it.
+- The parent can be able to send and receive direct message from the portal. 
+(Think of other creative ways to enhance the parents Portal)
+
+CONTACT FORM
+- The query should be received on an email.
+- This is where visitors to the website can send queries
+
+NEWS FEED
+- On the homepage, design a popup slider for the news capturing upcoming events, important news that should can be made public (remember those that can't be public will be publicized through parent's portal)
+- Have a news page where all these news and events can be accessed, filtered by either term, academic year and so on
+
+RESOURCE PAGE
+A page for all downloadable materials - design upload functionality for admin and
+download page where all pdf are visible and downloadable
+NB: Think if it's really necessary since news feed and the portal might handle this)
+
+
+This does not limit your creativity, any other that you can incorporate is an Okay.
+
+Ask questions until you are sure you have all you need to start. For images or videos just pick random images and logos.
+
+You have 14 days starting from Thursday.

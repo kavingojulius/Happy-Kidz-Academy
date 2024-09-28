@@ -39,32 +39,35 @@
                         <div class="col-lg-6 wow fadeIn" data-wow-delay="0.1s">
                             <div class="h-100 d-flex flex-column justify-content-center p-5">
                                 <p class="mb-4 fw-bold fs-4">Message us for any queries.</p>
-                                <form>
+                                <form action="https://api.web3forms.com/submit" method="POST">
+                                    <input type="hidden" name="access_key" value="23730c94-4e99-4f6b-8414-1f77ce387f41">
                                     <div class="row g-3">
                                         <div class="col-sm-6">
                                             <div class="form-floating">
-                                                <input type="text" class="form-control border-0" id="name" placeholder="Your Name">
+                                                <input type="text" name="name" class="form-control border-0" id="name" placeholder="Your Name">
                                                 <label for="name">Your Name</label>
                                             </div>
                                         </div>
                                         <div class="col-sm-6">
                                             <div class="form-floating">
-                                                <input type="email" class="form-control border-0" id="email" placeholder="Your Email">
+                                                <input type="email" name="email" class="form-control border-0" id="email" placeholder="Your Email">
                                                 <label for="email">Your Email</label>
                                             </div>
                                         </div>
                                         <div class="col-12">
                                             <div class="form-floating">
-                                                <input type="text" class="form-control border-0" id="subject" placeholder="Subject">
+                                                <input type="text" name="subject" class="form-control border-0" id="subject" placeholder="Subject">
                                                 <label for="subject">Subject</label>
                                             </div>
                                         </div>
                                         <div class="col-12">
                                             <div class="form-floating">
-                                                <textarea class="form-control border-0" placeholder="Leave a message here" id="message" style="height: 100px"></textarea>
+                                                <textarea class="form-control border-0" name="message" placeholder="Leave a message here" id="message" style="height: 100px"></textarea>
                                                 <label for="message">Message</label>
                                             </div>
                                         </div>
+                                        <!-- Honeypot Spam Protection -->
+                                        <input type="checkbox" name="botcheck" class="hidden" style="display: none;">
                                         <div class="col-12">
                                             <button class="btn btn-primary w-100 py-3" type="submit">Send Message</button>
                                         </div>
