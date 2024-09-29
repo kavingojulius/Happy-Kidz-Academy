@@ -2,6 +2,11 @@ from django.db import models
 from django.utils import timezone
 
 # Create your models here.
+class LandingPageText(models.Model):
+
+    title = models.CharField(max_length=200)
+    description = models.TextField(null=True)
+    
 
 class Event(models.Model):
     title = models.CharField(max_length=255)  # Title of the event

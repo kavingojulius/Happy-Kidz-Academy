@@ -35,33 +35,7 @@
                                 </div>
                             </div>
                         </div>
-                    </div>
-
-                    <!-- Carousel Item 3 -->
-                    <div class="owl-carousel-item position-relative">
-                        <img class="img-fluid" src="{% static 'media/carousel-2.jpg' %}" alt="">                            
-                    </div>
-
-                    <!-- Carousel Item 6 -->
-                    <div class="owl-carousel-item position-relative">
-                        <img class="img-fluid" src="{% static 'media/event4.jpg' %}" alt="" style="height: 380px;">                            
-                    </div>
-
-                    <!-- Carousel Item 4 -->
-                    <div class="owl-carousel-item position-relative">
-                        <img class="img-fluid" src="{% static 'media/event1.jpg' %}" alt="" style="height: 380px;">                            
-                    </div>
-
-                    <!-- Carousel Item 5 -->
-                    <div class="owl-carousel-item position-relative">
-                        <img class="img-fluid" src="{% static 'media/event2.jpg' %}" alt="" style="height: 380px;">                            
-                    </div>
-                    
-                    <!-- Carousel Item 6 -->
-                    <div class="owl-carousel-item position-relative">
-                        <img class="img-fluid" src="{% static 'media/event3.jpg' %}" alt="" style="height: 380px;">                            
-                    </div>
-                    
+                    </div>                                        
 
                 </div>
             </div>
@@ -125,7 +99,7 @@
 
 
 
-<!-- Events start -->
+<!-- Events 1 start -->
 
 <div class="container my-5 py-5 bg-secondary text-white position-relative rounded">
     <!-- Event Header -->
@@ -172,3 +146,84 @@
 
 
 <!-- Events end -->
+
+<!-- Events 2 -->
+<div class="container my-5 py-5 bg-secondary text-white position-relative rounded">
+    {% if event.is_event_active %}
+        <!-- Event Header -->
+        <div class="position-absolute top-0 start-50" style="transform: translate(-50%, -50%);">
+            <button class="btn btn-secondary rounded-pill text-whote fw-bold rounded p-3 fs-4" style="font-style: oblique;">Upcoming Event</button>
+        </div>
+
+        <div class="row g-5 align-items-center">
+            <!-- Event Image Section -->
+            <div class="col-md-6">
+                <div class="position-relative">
+                    <img src="{{ event.image.url }}" class="img-fluid rounded event-img w-100 h-100" alt="Event Image" style="object-fit: cover;">
+                </div>
+            </div>
+
+            <!-- Event Details Section -->
+            <div class="col-md-6">
+                <div class="d-flex mb-3">
+                    <div class="text-center me-4">
+                        <div class="display-6" id="days">00</div>
+                        <div>Days</div>
+                    </div>
+                    <div class="text-center me-4">
+                        <div class="display-6" id="hours">00</div>
+                        <div>Hr</div>
+                    </div>
+                    <div class="text-center me-4">
+                        <div class="display-6" id="minutes">00</div>
+                        <div>Min</div>
+                    </div>
+                    <div class="text-center">
+                        <div class="display-6" id="seconds">00</div>
+                        <div>Sec</div>
+                    </div>
+                    <span class="ms-3 align-self-center fs-5 fw-bold">Remaining</span>
+                </div>
+
+                <h2 class="fw-bold">{{ event.title }}</h2>
+                <p class="fs-5">{{ event.content }}</p>
+                <a href="#" class="btn btn-outline-light fw-bold">View all events</a>
+            </div>
+        </div>
+    {% else %}
+        <h2 class="fw-bold text-center">No events</h2>
+    {% endif %}
+</div>
+
+
+def homepage(request):
+    # Get the landing page text
+    landing_page_text = LandingPageText.objects.all()
+
+    # Fetch all upcoming events (events that haven't ended yet)
+    events = Event.objects.filter(end_time__gte=timezone.now()).order_by('start_time')
+
+    try:
+        # Get the time remaining for the first event if available
+        event = events.first()  # Get the first event
+        time_remaining = event.time_remaining() if event else None
+
+        # Convert the end time of the first event to a timestamp
+        event_end_timestamp = event.end_time.timestamp() if event else None
+
+    except Event.DoesNotExist:
+        event = None
+        time_remaining = None
+        event_end_timestamp = None
+
+    return render(request, 'main/index.html', {
+        'events': events,  # Pass multiple events here
+        'event': event,  # Still pass the first event if needed for other logic
+        'event_end_timestamp': event_end_timestamp,  # Timestamp for JS countdown
+        'landing_page_text': landing_page_text,
+    })
+ 
+
+
+
+

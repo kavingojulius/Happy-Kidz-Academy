@@ -2,28 +2,24 @@ from django.shortcuts import render
 from .models import *
 
 # Create your views here.
-def homepage(request):
-    try:
-        # Get the latest event
-        event = Event.objects.filter(end_time__gte=timezone.now()).order_by('start_time').first()
-        time_remaining = event.time_remaining() if event else None
+from django.utils import timezone
+from .models import Event, LandingPageText
 
-        
-        if event:
-            # Convert event end_time to a timestamp format
-            event_end_timestamp = event.end_time.timestamp()
-        else:
-            event_end_timestamp = None        
-    except Event.DoesNotExist:
-        event = None
-        days = hours = minutes = seconds = 0
+def homepage(request):
+    # Get the landing page text
+    landing_page_text = LandingPageText.objects.all()
+
+    # Fetch all upcoming events (events that haven't ended yet)
+    events = Event.objects.filter(end_time__gte=timezone.now()).order_by('start_time')
+
+    # Create a list of end timestamps for all events
+    event_end_timestamps = [event.end_time.timestamp() for event in events]
 
     return render(request, 'main/index.html', {
-        'event': event,
-        'event': event,
-        'event_end_timestamp': event_end_timestamp,  # Send the end time as a timestamp
+        'events': events,  # Pass all events here
+        'event_end_timestamps': event_end_timestamps,  # List of end timestamps for JS countdown
+        'landing_page_text': landing_page_text,
     })
-    
 
 def about_us(request):
 

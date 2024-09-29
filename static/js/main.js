@@ -43,6 +43,21 @@
         ]
     });
 
+    $(".event-carousel").owlCarousel({
+        autoplay: true,
+        autoplayTimeout: 15000, 
+        smartSpeed: 5000,
+        items: 1,
+        dots: true,
+        loop: true,
+        nav : true,
+        navText : [
+            '<i class="bi bi-chevron-left"></i>',
+            '<i class="bi bi-chevron-right"></i>'
+        ]
+    });
+
+
 
     // Testimonials carousel
     $(".testimonial-carousel").owlCarousel({

@@ -18,12 +18,14 @@
                 <div class="position-absolute top-0 start-0 h-100 d-flex align-items-center" style="background: rgba(0, 0, 0, .2); width: 100%;">
                     <div class="container-fluid">
                         <div class="row justify-content-start">
+                            {% for items in landing_page_text %}
                             <div class="col-10 col-lg-8">
-                                <h1 class="display-6 text-white animated slideInDown mb-4">The Best Kindergarten School For Your Child</h1>
-                                <p class="fs-5 fw-medium text-white mb-4 pb-2">Vero elitr justo clita lorem. Ipsum dolor at sed stet sit diam no. Kasd rebum ipsum et diam justo clita et kasd rebum sea elitr.</p>
+                                <h1 class="display-6 text-white animated slideInDown mb-4">{{items.title}}</h1>
+                                <p class="fs-5 fw-medium text-white mb-4 pb-2">{{items.description}}.</p>
                                 <a href="#" class="btn btn-primary rounded-pill py-sm-3 px-sm-5 me-3 animated slideInLeft">Learn More</a>
                                 <a href="#" class="btn btn-dark rounded-pill py-sm-3 px-sm-5 animated slideInRight">Our Classes</a>
                             </div>
+                            {% endfor %}
                         </div>
                     </div>
                 </div>
@@ -34,86 +36,212 @@
 
 
     <!-- Events start -->
-    
-    <div class="container my-5 py-5 bg-secondary text-white position-relative rounded">
-        {% if event.is_event_active %}
-            <!-- Event Header -->
-            <div class="position-absolute top-0 start-50" style="transform: translate(-50%, -50%);">
-                <button class="btn btn-secondary rounded-pill text-whote fw-bold rounded p-3 fs-4" style="font-style: oblique;">Upcoming Event</button>
-            </div>
+<!-- Events Carousel -->
+<div id="eventCarousel" class="carousel slide" data-bs-ride="carousel" data-bs-interval="8000"> <!-- Set to 8 seconds -->
+    <div class="carousel-inner">
+        <!-- Check if events exist -->
+        {% if events %}
+            {% for event in events %}
+                <div class="carousel-item {% if forloop.first %}active{% endif %} smooth-scroll">
+                    <!-- Single event content -->
+                    <div class="container my-5 py-5 bg-secondary text-white position-relative rounded">
+                        <!-- Event Header -->
+                        <div class="position-absolute top-0 start-50" style="transform: translate(-50%, -50%);">
+                            <button class="btn btn-secondary rounded-pill text-white fw-bold p-3 fs-4" style="font-style: oblique;">
+                                Upcoming Event
+                            </button>
+                        </div>
 
-            <div class="row g-5 align-items-center">
-                <!-- Event Image Section -->
-                <div class="col-md-6">
-                    <div class="position-relative">
-                        <img src="{{ event.image.url }}" class="img-fluid rounded event-img w-100 h-100" alt="Event Image" style="object-fit: cover;">
+                        <div class="row g-5 align-items-center">
+                            <!-- Event Image -->
+                            <div class="col-md-6">
+                                <img src="{{ event.image.url }}" class="img-fluid rounded w-100 h-100" alt="Event Image" style="object-fit: cover;">
+                            </div>
+
+                            <!-- Event Details -->
+                            <div class="col-md-6">
+                                <div class="d-flex mb-3">
+                                    <div class="text-center me-4">
+                                        <div class="display-6" id="days-{{ forloop.counter0 }}">00</div>
+                                        <div>Days</div>
+                                    </div>
+                                    <div class="text-center me-4">
+                                        <div class="display-6" id="hours-{{ forloop.counter0 }}">00</div>
+                                        <div>Hr</div>
+                                    </div>
+                                    <div class="text-center me-4">
+                                        <div class="display-6" id="minutes-{{ forloop.counter0 }}">00</div>
+                                        <div>Min</div>
+                                    </div>
+                                    <div class="text-center">
+                                        <div class="display-6" id="seconds-{{ forloop.counter0 }}">00</div>
+                                        <div>Sec</div>
+                                    </div>
+                                    <span class="ms-3 align-self-center fs-5 fw-bold">Remaining</span>
+                                </div>
+                                
+
+                                <h2 class="fw-bold">{{ event.title }}</h2>
+                                <p class="fs-5">{{ event.content }}</p>
+                                <a href="#" class="btn btn-outline-light fw-bold">View all events</a>
+                            </div>
+                        </div>
                     </div>
                 </div>
-
-                <!-- Event Details Section -->
-                <div class="col-md-6">
-                    <div class="d-flex mb-3">
-                        <div class="text-center me-4">
-                            <div class="display-6" id="days">00</div>
-                            <div>Days</div>
-                        </div>
-                        <div class="text-center me-4">
-                            <div class="display-6" id="hours">00</div>
-                            <div>Hr</div>
-                        </div>
-                        <div class="text-center me-4">
-                            <div class="display-6" id="minutes">00</div>
-                            <div>Min</div>
-                        </div>
-                        <div class="text-center">
-                            <div class="display-6" id="seconds">00</div>
-                            <div>Sec</div>
-                        </div>
-                        <span class="ms-3 align-self-center fs-5 fw-bold">Remaining</span>
-                    </div>
-
-                    <h2 class="fw-bold">{{ event.title }}</h2>
-                    <p class="fs-5">{{ event.content }}</p>
-                    <a href="#" class="btn btn-outline-light fw-bold">View all events</a>
-                </div>
-            </div>
+            {% endfor %}
         {% else %}
-            <h2 class="fw-bold text-center">No events</h2>
+            <!-- No events fallback -->
+            <div class="carousel-item active">
+                <div class="container my-5 py-5 bg-secondary text-white position-relative rounded">
+                    <h2 class="fw-bold text-center">No events</h2>
+                </div>
+            </div>
         {% endif %}
     </div>
 
+    <!-- Carousel Controls -->
+    <button class="carousel-control-prev custom-carousel-control" type="button" data-bs-target="#eventCarousel" data-bs-slide="prev">
+        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+        <span class="visually-hidden">Previous</span>
+    </button>
+    <button class="carousel-control-next custom-carousel-control" type="button" data-bs-target="#eventCarousel" data-bs-slide="next">
+        <span class="carousel-control-next-icon" aria-hidden="true"></span>
+        <span class="visually-hidden">Next</span>
+    </button>
+
+</div>
+
+<!-- Custom Styles -->
+
+<style>
+    .custom-carousel-control {
+        background-color: orange;
+        width: 50px; /* Reduce width */
+        height: 50px; /* Reduce height */
+        border-radius: 50%; /* Make it circular */
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        position: absolute;
+        top: 50%; /* Center vertically */
+        transform: translateY(-50%); /* Adjust for perfect centering */
+    }
+    
+    /* Make the control icons smaller */
+    .carousel-control-prev-icon,
+    .carousel-control-next-icon {
+        background-size: 50%;
+    }
+
+    /* Position previous and next buttons properly */
+    .carousel-control-prev {
+        left: 10px; /* Adjust to your preference */
+    }
+
+    .carousel-control-next {
+        right: 10px; /* Adjust to your preference */
+    }
+    .carousel-item img {
+        max-height: 300px; /* Set a max height for the images */
+        width: auto;       /* Maintain aspect ratio */
+        object-fit: cover; /* Cover the area without stretching */
+    }
+    
+
+    /* Smooth transition effect */
+    .smooth-scroll {
+        transition: transform 2s ease-in-out; /* Adjust duration and timing function */
+    }
+</style>
+
+<!-- JavaScript for Smooth Scroll Effect and Autoplay -->
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        var carousel = document.querySelector('#eventCarousel');
+        var carouselItems = carousel.querySelectorAll('.carousel-item');
+        var currentIndex = 0; // Track the current index
+
+        // Autoplay function
+        function autoplayCarousel() {
+            setInterval(function() {
+                // Calculate the next index
+                currentIndex = (currentIndex + 1) % carouselItems.length; // Loop back to first item
+                var nextItem = carouselItems[currentIndex];
+                
+                // Use Bootstrap's carousel methods to slide to the next item
+                var carouselInstance = bootstrap.Carousel.getInstance(carousel);
+                carouselInstance.to(currentIndex); // Slide to the next item
+            }, 8000); // 8 seconds
+        }
+
+        // Start autoplay
+        autoplayCarousel();
+
+        // Existing slide event listener for smooth transition
+        carousel.addEventListener('slide.bs.carousel', function (event) {
+            var nextItem = carouselItems[event.to];
+
+            // Apply the smooth scroll effect
+            if (nextItem) {
+                nextItem.style.transform = 'translateY(0)'; // Reset position
+            }
+
+            // Reset the transform on the items after transition
+            setTimeout(() => {
+                carouselItems.forEach(item => {
+                    item.style.transform = ''; // Clear styles after transition
+                });
+            }, 500); // Match this with your transition duration
+        });
+    });
+</script>
+
+
+
+
+
+
+    <!-- Events end -->
+
+
+
     <!-- JavaScript Countdown -->
     <script>
-        // Event end timestamp from Django view
-        var eventEndTimestamp = {{ event_end_timestamp|safe }} * 1000; // Convert to milliseconds
-
+        // Event end timestamps from Django view
+        var eventEndTimestamps = {{ event_end_timestamps|safe }}.map(ts => ts * 1000); // Convert to milliseconds
+    
         // Function to calculate remaining time and update the HTML
         function updateCountdown() {
             var now = new Date().getTime(); // Current time in milliseconds
-            var timeRemaining = eventEndTimestamp - now;
-
-            if (timeRemaining > 0) {
-                var days = Math.floor(timeRemaining / (1000 * 60 * 60 * 24));
-                var hours = Math.floor((timeRemaining % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-                var minutes = Math.floor((timeRemaining % (1000 * 60 * 60)) / (1000 * 60));
-                var seconds = Math.floor((timeRemaining % (1000 * 60)) / 1000);
-
-                document.getElementById("days").innerHTML = days;
-                document.getElementById("hours").innerHTML = hours;
-                document.getElementById("minutes").innerHTML = minutes;
-                document.getElementById("seconds").innerHTML = seconds;
-            } else {
-                // If time runs out, show "No events"
-                document.querySelector(".container").innerHTML = '<h2 class="fw-bold text-center">No events</h2>';
-            }
+    
+            eventEndTimestamps.forEach((eventEndTimestamp, index) => {
+                var timeRemaining = eventEndTimestamp - now;
+    
+                // Update only if the element exists
+                if (timeRemaining > 0) {
+                    var days = Math.floor(timeRemaining / (1000 * 60 * 60 * 24));
+                    var hours = Math.floor((timeRemaining % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+                    var minutes = Math.floor((timeRemaining % (1000 * 60 * 60)) / (1000 * 60));
+                    var seconds = Math.floor((timeRemaining % (1000 * 60)) / 1000);
+    
+                    document.getElementById(`days-${index}`).innerHTML = days;
+                    document.getElementById(`hours-${index}`).innerHTML = hours;
+                    document.getElementById(`minutes-${index}`).innerHTML = minutes;
+                    document.getElementById(`seconds-${index}`).innerHTML = seconds;
+                } else {
+                    // Handle countdown completion for this specific event
+                    document.querySelector(`#event-${index}`).innerHTML = '<h2 class="fw-bold text-center">Event Ended</h2>';
+                }
+            });
         }
-
+    
         // Update the countdown every 1 second
         setInterval(updateCountdown, 1000);
-
+    
         // Run the function immediately so that the time shows right away
         updateCountdown();
     </script>
+    
 
     
     <!-- Events end -->
