@@ -35,7 +35,16 @@ def news(request):
 
 def events(request):
 
-    return render(request, 'main/events.html')
+    # Fetch all upcoming events
+    events = Event.objects.filter(end_time__gte=timezone.now()).order_by('start_time')
+
+    # Create a list of end timestamps for all events
+    event_end_timestamps = [event.end_time.timestamp() for event in events]
+
+    return render(request, 'main/events.html', {
+        'events': events,  # Pass all events here
+        'event_end_timestamps': event_end_timestamps,  # List of end timestamps for JS countdown
+    })
 
 def contact_us(request):
 

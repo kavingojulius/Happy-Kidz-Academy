@@ -6,6 +6,97 @@
 
 {% block content %}
 
+<!-- Events Page Layout -->
+<div class="container my-5">
+    <div class="row g-4">
+        <!-- Loop through all events passed from the backend -->
+        {% for event in events %}
+            <div class="col-md-4">
+                <div class="event-card bg-light p-3 rounded shadow-sm position-relative">
+                    <div class="event-image mb-3">
+                        <img src="{{ event.image.url }}" alt="{{ event.title }}" class="img-fluid rounded" style="max-height: 200px; object-fit: cover;">
+                    </div>
+                    <h3 class="event-title">{{ event.title }}</h3>
+                    <p>{{ event.content }}</p>
+                    
+                    <!-- Countdown Timer -->
+                    <div class="countdown d-flex justify-content-between text-center my-3">
+                        <div>
+                            <span id="days-{{ forloop.counter0 }}">00</span> Days
+                        </div>
+                        <div>
+                            <span id="hours-{{ forloop.counter0 }}">00</span> Hrs
+                        </div>
+                        <div>
+                            <span id="minutes-{{ forloop.counter0 }}">00</span> Mins
+                        </div>
+                        <div>
+                            <span id="seconds-{{ forloop.counter0 }}">00</span> Secs
+                        </div>
+                    </div>
+                    
+                    <!-- <a href="#" class="btn btn-primary w-100">View Event</a> -->
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+</div>
+
+<!-- Custom CSS for the event cards -->
+<style>
+    .event-card {
+        height: 100%;
+    }
+    .event-image img {
+        width: 100%;
+        max-height: 200px;
+        object-fit: cover;
+    }
+    .countdown div {
+        flex: 1;
+    }
+    .countdown span {
+        display: block;
+        font-size: 1.5rem;
+        font-weight: bold;
+    }
+</style>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // Get the event end timestamps passed from the Django backend
+        const eventEndTimestamps = {{ event_end_timestamps|safe }};
+
+        // Initialize countdown for each event
+        eventEndTimestamps.forEach(function(timestamp, index) {
+            const countdownInterval = setInterval(function() {
+                const now = new Date().getTime(); // Current time in milliseconds
+                const distance = timestamp * 1000 - now; // Difference between event end and current time
+
+                // Calculate time components
+                const days = Math.floor(distance / (1000 * 60 * 60 * 24));
+                const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+                const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+                const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+
+                // Update the HTML for each event countdown
+                document.getElementById(`days-${index}`).innerHTML = days;
+                document.getElementById(`hours-${index}`).innerHTML = hours;
+                document.getElementById(`minutes-${index}`).innerHTML = minutes;
+                document.getElementById(`seconds-${index}`).innerHTML = seconds;
+
+                // If the countdown is over, stop the timer
+                if (distance < 0) {
+                    clearInterval(countdownInterval);
+                    document.getElementById(`days-${index}`).innerHTML = "00";
+                    document.getElementById(`hours-${index}`).innerHTML = "00";
+                    document.getElementById(`minutes-${index}`).innerHTML = "00";
+                    document.getElementById(`seconds-${index}`).innerHTML = "00";
+                }
+            }, 1000); // Update countdown every second
+        });
+    });
+</script>
 
 
 {% endblock %}
