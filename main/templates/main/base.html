@@ -34,7 +34,19 @@
 </head>
 
 <body>
-    
+
+
+        <!-- Contact Info Start -->
+        <div class="contact-bar bg-light py-2" id="contactBar">
+            <div class="container-fluid d-flex justify-content-between">
+                <div>
+                    <i class="fa fa-envelope me-2"></i>info@happykidzacademy.com
+                    <i class="fa fa-phone ms-4 me-2"></i>0728 260082
+                </div>                
+            </div>
+        </div>
+        <!-- Contact Info End -->
+
         
         <!-- Navbar Start -->
         <nav class="navbar navbar-expand-lg bg-white navbar-light sticky-top">
@@ -158,6 +170,20 @@
 
     <!-- Template Javascript -->
     <script src="{% static 'js/main.js' %}"></script>
+    <script>
+        // When the user scrolls down, hide the contact bar
+        window.onscroll = function() {
+            let contactBar = document.getElementById("contactBar");
+            let scrollPosition = window.pageYOffset || document.documentElement.scrollTop;
+    
+            // If the user scrolls down more than 100px, hide the contact bar
+            if (scrollPosition > 100) {
+                contactBar.style.display = "none";
+            } else {
+                contactBar.style.display = "block";
+            }
+        };
+    </script>
 </body>
 
 </html>
