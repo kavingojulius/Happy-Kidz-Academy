@@ -11,10 +11,10 @@
 <ul>
 
     {% for pdf in pdfs %}
-        <li class="my-2">
-            <a style="color:green;margin-right:1.3rem;" href="{{ pdf.pdf.url }}" target="_blank">{{ pdf.title }}</a> <!-- This opens the PDF in a new tab -->
+        <li class="my-2 downloads">
+            <a style="color:black;margin-right:1.3rem;" href="{{ pdf.pdf.url }}" class="dw" target="_blank">{{ pdf.title }}</a> <!-- This opens the PDF in a new tab -->
             
-            <a style="color:rgb(0, 0, 0);" href="{{ pdf.pdf.url }}" class="btn btn-outline-success" download>Download</a> <!-- Download option -->
+            <a style="color:rgb(0, 0, 0);" href="{{ pdf.pdf.url }}" class="btn btn-outline-primary" download>Download</a> <!-- Download option -->
         </li>
     {% empty %}
         <li>No Download materials available</li>

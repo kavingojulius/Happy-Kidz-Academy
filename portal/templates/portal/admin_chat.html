@@ -2,16 +2,11 @@
 
 {% load static %}
 
-{% block title %} Parents Portal {% endblock %}
+{% block title %} Admin Chat Page {% endblock %}
 
 {% block content %}
-<div class="container">
-    <h3>{{ User.username }}</h3>
-</div>
-
-<!-- Chat section -->
 <div class="chat-container">
-    <h2>Chat with Admin</h2>
+    <h2>Chat with {{ user.username }}</h2>
     
     <div id="chat-box" class="chat-box">
         <!-- Messages will be dynamically loaded here -->
@@ -20,8 +15,11 @@
     <form method="POST" class="chat-form">
         {% csrf_token %}
         <textarea id="message-input" name="message" placeholder="Enter your message here" class="chat-input"></textarea><br>
-        <button type="submit" class="chat-button">Send</button>
+        <button type="submit" class="chat-button">Reply</button>
     </form>
+</div>
+<div>
+    <a href="{% url 'admin_conversations' %}">Back to conversations</a>
 </div>
 
 <!-- AJAX for refreshing messages without reloading the page -->
@@ -29,22 +27,23 @@
 <script>
     function loadMessages() {
         $.ajax({
-            url: "{% url 'get_messages' request.user.id %}",  // Pass the user_id to the URL
+            url: "{% url 'get_messages' user.id %}",  // Pass the user_id to the URL
             method: 'GET',
             success: function(data) {
                 let messages = JSON.parse(data.messages);
                 let chatBox = document.getElementById("chat-box");
                 chatBox.innerHTML = '';  // Clear the chat box
+                
                 messages.forEach(function(message) {
                     let msgDiv = document.createElement('div');
                     msgDiv.classList.add('chat-message');
                     
                     if (message.fields.sender == "{{ request.user.id }}") {
                         msgDiv.classList.add('user-message');
-                        msgDiv.innerHTML = "<b>You:</b> " + message.fields.message;
+                        msgDiv.innerHTML = "<b>You (Admin):</b> " + message.fields.message;
                     } else {
-                        msgDiv.classList.add('admin-message');
-                        msgDiv.innerHTML = "<b>Admin:</b> " + message.fields.message;
+                        msgDiv.classList.add('user-message-other');
+                        msgDiv.innerHTML = "<b>{{ user.username }}:</b> " + message.fields.message;
                     }
                     chatBox.appendChild(msgDiv);
                 });
@@ -91,15 +90,15 @@
         word-wrap: break-word;
     }
 
-    /* User's messages */
+    /* Admin's messages */
     .user-message {
         background-color: #e0ffe0;
         text-align: right;
         margin-left: auto;
     }
 
-    /* Admin's messages */
-    .admin-message {
+    /* User's messages */
+    .user-message-other {
         background-color: #f1f1f1;
     }
 
@@ -113,7 +112,7 @@
         resize: none;
     }
 
-    /* Send button styling */
+    /* Reply button styling */
     .chat-button {
         background-color: #007bff;
         color: #fff;

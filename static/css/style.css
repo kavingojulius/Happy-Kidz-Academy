@@ -126,7 +126,9 @@ h6,
     transform: rotate(-180deg);
 }
 
-
+.downloads .dw:hover{
+    color: var(--primary);
+}
 
 @media (max-width: 991.98px) {
     .navbar .navbar-nav .nav-link  {
