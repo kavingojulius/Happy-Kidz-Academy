@@ -40,6 +40,7 @@
                 let messages = JSON.parse(data.messages);
                 let chatBox = document.getElementById("chat-box");
                 chatBox.innerHTML = '';  // Clear the chat box
+
                 messages.forEach(function(message) {
                     let msgDiv = document.createElement('div');
                     msgDiv.classList.add('chat-message');
@@ -61,35 +62,46 @@
     }
 
     function checkNewMessages() {
-        $.ajax({
-            url: "{% url 'get_messages' request.user.id %}",
-            method: 'GET',
-            success: function(data) {
-                let messages = JSON.parse(data.messages);
-                let unread = false;
-                messages.forEach(function(message) {
-                    // Ensure that the message has a 'read' attribute
-                    if (message.fields.sender != "{{ request.user.id }}" && !message.fields.read) {
-                        unread = true;
-                    }
-                });
-                
-                // Show/hide the new message badge
-                let badge = document.getElementById('new-message-badge');
-                if (unread) {
-                    badge.style.display = 'inline-block';
-                } else {
-                    badge.style.display = 'none';
+    $.ajax({
+        url: "{% url 'get_messages' request.user.id %}",
+        method: 'GET',
+        success: function(data) {
+            let messages = JSON.parse(data.messages);
+            let unreadCount = 0;
+
+            messages.forEach(function(message) {
+                // Count unread messages from admin
+                if (message.fields.sender != "{{ request.user.id }}" && !message.fields.read) {
+                    unreadCount++;
+                }
+            });
+
+            // Show/hide the new message badge
+            let badge = document.getElementById('new-message-badge');
+            if (unreadCount > 0) {
+                if (!badge) {
+                    // Create and add the badge if it doesn't exist
+                    badge = document.createElement('span');
+                    badge.classList.add('new-message-badge');
+                    badge.innerText = 'New Message';
+                    document.getElementById('chat-toggle').appendChild(badge); // Append badge to the chat button
+                }
+            } else {
+                // Remove the badge if there are no new messages
+                if (badge) {
+                    badge.remove();
                 }
             }
-        });
-    }
+        }
+    });
+}
 
     // Load messages every 5 seconds and check for new messages
     setInterval(loadMessages, 5000);
     setInterval(checkNewMessages, 5000);
     loadMessages();  // Initial load
     checkNewMessages();  // Initial check for new messages
+
 
     // Toggle chat visibility
     document.getElementById('chat-toggle').addEventListener('click', function() {

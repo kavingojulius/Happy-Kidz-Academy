@@ -17,12 +17,15 @@ def portal(request):
     messages = messages.order_by('timestamp')
 
     # Get unread messages count
-    unread_count = Message.objects.filter(receiver=request.user, read=False).count()
+    unread_count = Message.objects.filter(receiver=request.user,sender=request.user, read=False).count()
+    
+    # Mark unread messages as read when the admin opens the chat
+    Message.objects.filter(sender=request.user, receiver=request.user, read=False).update(read=True)
 
     if request.method == 'POST':
         message_text = request.POST['message']
         if message_text:
-            Message.objects.create(sender=request.user, receiver=admin_user, message=message_text, read=False)
+            Message.objects.create(sender=request.user, receiver=admin_user, message=message_text)
             return redirect('portal')  # Reload the page after submitting
 
     return render(request, 'portal/portal.html', {
