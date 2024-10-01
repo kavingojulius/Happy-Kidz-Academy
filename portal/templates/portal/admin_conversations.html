@@ -2,15 +2,115 @@
 
 {% load static %}
 
-{% block title %} Admin conversations Page {% endblock %}
+{% block title %} Admin Conversations Page {% endblock %}
 
 {% block content %}
 
+<div class="container">
     <h2>User Conversations</h2>
-    <ul>
+    
+    <div class="conversations">
         {% for user in users %}
-            <li><a href="{% url 'admin_chat' user.id %}">{{ user.username }}</a></li>
+            <div class="user-card" id="user-{{ user.id }}">
+                <a href="{% url 'admin_chat' user.id %}">
+                    <div class="user-info">
+                        <h3>{{ user.username }}</h3>
+                        {% if users_with_unread.user.id > 0 %}
+                            <span class="new-message-badge">New Message</span>
+                        {% endif %}
+                    </div>
+                </a>
+            </div>
         {% endfor %}
-    </ul>    
+    </div>
+</div>
+
+<!-- AJAX for refreshing new message indicators -->
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+    function checkNewMessages() {
+        $.ajax({
+            url: "{% url 'admin_conversations' %}",  // AJAX call to the same view
+            method: 'GET',
+            success: function(data) {
+                const usersWithUnread = data.users_with_unread;
+
+                // Loop through users to update their badges
+                Object.keys(usersWithUnread).forEach(function(userId) {
+                    const unreadCount = usersWithUnread[userId];
+                    const userCard = document.getElementById('user-' + userId);
+
+                    // Find the badge element (if it exists)
+                    let badge = userCard.querySelector('.new-message-badge');
+
+                    if (unreadCount > 0) {
+                        if (!badge) {
+                            // Create and add the badge if it doesn't exist
+                            badge = document.createElement('span');
+                            badge.classList.add('new-message-badge');
+                            badge.innerText = 'New Message';
+                            userCard.querySelector('.user-info').appendChild(badge);
+                        }
+                    } else {
+                        // Remove the badge if there are no new messages
+                        if (badge) {
+                            badge.remove();
+                        }
+                    }
+                });
+            }
+        });
+    }
+
+    // Check for new messages every 5 seconds
+    setInterval(checkNewMessages, 5000);
+    checkNewMessages();  // Initial check
+</script>
+
+<style>
+    /* Styling the conversations page */
+    .conversations {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 20px;
+    }
+
+    .user-card {
+        width: 250px;
+        padding: 15px;
+        border: 1px solid #ddd;
+        border-radius: 10px;
+        background-color: #f9f9f9;
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        text-align: center;
+        position: relative;
+        transition: box-shadow 0.3s ease;
+    }
+
+    .user-card:hover {
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+    }
+
+    .user-info h3 {
+        margin: 0;
+        font-size: 18px;
+    }
+
+    .new-message-badge {
+        background-color: #ff0000;
+        color: #fff;
+        padding: 5px 10px;
+        border-radius: 50px;
+        font-size: 12px;
+        position: absolute;
+        top: 10px;
+        right: 10px;
+    }
+
+    .user-card a {
+        text-decoration: none;
+        color: inherit;
+    }
+</style>
 
 {% endblock %}

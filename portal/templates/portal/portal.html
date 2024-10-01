@@ -6,18 +6,23 @@
 
 {% block content %}
 <div class="container">
-    <h3>{{ User.username }}</h3>
+    <h3>{{ request.user.username }}</h3>
 </div>
 
-<!-- Chat section -->
-<div class="chat-container">
+<!-- Chat button to toggle the chat window -->
+<button id="chat-toggle" class="chat-toggle-btn">
+    Chat <span id="new-message-badge" class="new-message-badge" style="display: none;">New Message</span>
+</button>
+
+<!-- Chat section (initially hidden) -->
+<div id="chat-container" class="chat-container" style="display: none;">
     <h2>Chat with Admin</h2>
     
     <div id="chat-box" class="chat-box">
         <!-- Messages will be dynamically loaded here -->
     </div>
     
-    <form method="POST" class="chat-form">
+    <form method="POST" class="chat-form" id="chat-form">
         {% csrf_token %}
         <textarea id="message-input" name="message" placeholder="Enter your message here" class="chat-input"></textarea><br>
         <button type="submit" class="chat-button">Send</button>
@@ -29,7 +34,7 @@
 <script>
     function loadMessages() {
         $.ajax({
-            url: "{% url 'get_messages' request.user.id %}",  // Pass the user_id to the URL
+            url: "{% url 'get_messages' request.user.id %}",
             method: 'GET',
             success: function(data) {
                 let messages = JSON.parse(data.messages);
@@ -55,9 +60,69 @@
         });
     }
 
-    // Load messages every 5 seconds
+    function checkNewMessages() {
+        $.ajax({
+            url: "{% url 'get_messages' request.user.id %}",
+            method: 'GET',
+            success: function(data) {
+                let messages = JSON.parse(data.messages);
+                let unread = false;
+                messages.forEach(function(message) {
+                    // Ensure that the message has a 'read' attribute
+                    if (message.fields.sender != "{{ request.user.id }}" && !message.fields.read) {
+                        unread = true;
+                    }
+                });
+                
+                // Show/hide the new message badge
+                let badge = document.getElementById('new-message-badge');
+                if (unread) {
+                    badge.style.display = 'inline-block';
+                } else {
+                    badge.style.display = 'none';
+                }
+            }
+        });
+    }
+
+    // Load messages every 5 seconds and check for new messages
     setInterval(loadMessages, 5000);
+    setInterval(checkNewMessages, 5000);
     loadMessages();  // Initial load
+    checkNewMessages();  // Initial check for new messages
+
+    // Toggle chat visibility
+    document.getElementById('chat-toggle').addEventListener('click', function() {
+        let chatContainer = document.getElementById('chat-container');
+        if (chatContainer.style.display === 'none') {
+            chatContainer.style.display = 'block';
+            loadMessages(); // Load messages when the chat is opened
+        } else {
+            chatContainer.style.display = 'none';
+        }
+    });
+
+    // Handle message submission
+    document.getElementById('chat-form').addEventListener('submit', function(event) {
+        event.preventDefault(); // Prevent the form from submitting the traditional way
+        let messageInput = document.getElementById('message-input');
+        let messageText = messageInput.value;
+
+        if (messageText) {
+            $.ajax({
+                url: "{% url 'portal' %}", // Ensure this is the correct URL for sending messages
+                method: 'POST',
+                data: {
+                    'message': messageText,
+                    'csrfmiddlewaretoken': '{{ csrf_token }}' // Include CSRF token
+                },
+                success: function() {
+                    messageInput.value = ''; // Clear input after sending
+                    loadMessages(); // Refresh messages
+                }
+            });
+        }
+    });
 </script>
 
 <style>
@@ -128,5 +193,30 @@
         background-color: #0056b3;
     }
 
+    /* Chat toggle button styling */
+    .chat-toggle-btn {
+        background-color: #28a745;
+        color: #fff;
+        padding: 10px 20px;
+        border: none;
+        border-radius: 10px;
+        cursor: pointer;
+        margin-bottom: 15px;
+        font-size: 16px;
+    }
+
+    .chat-toggle-btn:hover {
+        background-color: #218838;
+    }
+
+    /* New message badge */
+    .new-message-badge {
+        background-color: #ff0000;
+        color: #fff;
+        padding: 5px 10px;
+        border-radius: 50px;
+        font-size: 12px;
+        margin-left: 10px;
+    }
 </style>
 {% endblock %}

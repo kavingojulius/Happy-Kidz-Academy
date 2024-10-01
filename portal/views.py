@@ -16,13 +16,19 @@ def portal(request):
                Message.objects.filter(sender=admin_user, receiver=request.user)
     messages = messages.order_by('timestamp')
 
+    # Get unread messages count
+    unread_count = Message.objects.filter(receiver=request.user, read=False).count()
+
     if request.method == 'POST':
         message_text = request.POST['message']
         if message_text:
-            Message.objects.create(sender=request.user, receiver=admin_user, message=message_text)
+            Message.objects.create(sender=request.user, receiver=admin_user, message=message_text, read=False)
             return redirect('portal')  # Reload the page after submitting
 
-    return render(request, 'portal/portal.html',  {'messages': messages})
+    return render(request, 'portal/portal.html', {
+        'messages': messages,
+        'unread_count': unread_count,  # Pass unread count to the template
+    })
 
 def register(request):
     if request.method == 'POST':
@@ -65,15 +71,30 @@ def logoutUser(request):
     logout(request)
     return redirect('home')
 
+# views.py
+
 @login_required
 def admin_conversations(request):
     if not request.user.is_superuser:
         return redirect('home')  # Restrict access to admin
 
-    # Get distinct users who have sent messages
+    # Get distinct users who have sent messages to the admin
     users = User.objects.filter(sent_messages__receiver=request.user).distinct()
 
-    return render(request, 'portal/admin_conversations.html', {'users': users})
+    # Check for unread messages from each user
+    users_with_unread = {}
+    for user in users:
+        unread_count = Message.objects.filter(sender=user, receiver=request.user, read=False).count()
+        users_with_unread[user.id] = unread_count
+
+    # Check if the request is an AJAX request by inspecting headers
+    if request.headers.get('x-requested-with') == 'XMLHttpRequest':
+        return JsonResponse({'users_with_unread': users_with_unread})
+
+    return render(request, 'portal/admin_conversations.html', {
+        'users': users,
+        'users_with_unread': users_with_unread,
+    })
 
 @login_required
 def admin_chat(request, user_id):
@@ -82,9 +103,14 @@ def admin_chat(request, user_id):
 
     user = User.objects.get(id=user_id)
     admin_user = request.user
+
+    # Fetch all messages between the admin and the user
     messages = Message.objects.filter(sender=user, receiver=admin_user) | \
                Message.objects.filter(sender=admin_user, receiver=user)
     messages = messages.order_by('timestamp')
+
+    # Mark unread messages as read when the admin opens the chat
+    Message.objects.filter(sender=user, receiver=admin_user, read=False).update(read=True)
 
     if request.method == 'POST':
         message_text = request.POST['message']
@@ -102,6 +128,10 @@ def get_messages(request, user_id=None):
     messages = Message.objects.filter(sender=user, receiver=admin_user) | \
                Message.objects.filter(sender=admin_user, receiver=user)
     messages = messages.order_by('timestamp')
+
+    # Mark all unread messages from admin as read when user opens the chat
+    if not request.user.is_superuser:
+        Message.objects.filter(sender=admin_user, receiver=user, read=False).update(read=True)
 
     # Convert the queryset to JSON
     messages_json = serializers.serialize('json', messages)

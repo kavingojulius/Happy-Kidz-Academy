@@ -8,6 +8,7 @@ class Message(models.Model):
     receiver = models.ForeignKey(User, related_name='received_messages', on_delete=models.CASCADE)
     message = models.TextField()
     timestamp = models.DateTimeField(auto_now_add=True)
+    read = models.BooleanField(default=False)  # New field to track if a message is read
 
     def __str__(self):
         return f'{self.sender} to {self.receiver}: {self.message[:50]}'
