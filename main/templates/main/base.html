@@ -89,7 +89,7 @@
                         </div>
                         <a href="{% url 'log_in' %}" class="nav-item nav-link">Portal</a>
                         <a href="{% url 'contact_us' %}" class="nav-item nav-link">Contact Us</a>
-                        <a href="" class="btn btn-primary rounded-pill nav-item nav-link">Admission</a>
+                        <a href="{% url 'admission' %}" class="btn btn-primary rounded-pill nav-item nav-link">Admission</a>
 
                         {% if request.user.is_authenticated %}
                             <a href="{% url 'logout' %}" class="nav-item nav-link">Logout</a>

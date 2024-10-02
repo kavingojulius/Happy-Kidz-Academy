@@ -1,5 +1,6 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from .models import *
+from .forms import *
 
 # Create your views here.
 from django.utils import timezone
@@ -57,3 +58,17 @@ def downloads(request):
 def gallery(request):
     gallery = Gallery.objects.all()
     return render(request, 'main/gallery.html', {'gallery':gallery})
+
+def admission(request):
+    if request.method == 'POST':
+        form = StudentAdmissionForm(request.POST)
+        if form.is_valid():
+            form.save()  # Save the form data to the database
+            return redirect('admission_success')  # Redirect to a success page after submission
+    else:
+        form = StudentAdmissionForm()
+    return render(request, 'main/admission.html', {'form':form})
+
+def admission_success(request):    
+    return render(request, 'main/admission_success.html')
+

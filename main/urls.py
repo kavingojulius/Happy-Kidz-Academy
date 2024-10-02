@@ -10,4 +10,6 @@ urlpatterns = [
     path('contact', contact_us, name='contact_us'),
     path('gallery', gallery, name='gallery'),
     path('downloads', downloads ,name='downloads'),
+    path('admission', admission, name='admission'),
+    path('admission_success', admission_success, name='admission_success'),
 ]
