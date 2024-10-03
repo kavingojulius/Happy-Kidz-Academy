@@ -5,14 +5,15 @@
 {% block title %} Parents Portal {% endblock %}
 
 {% block content %}
-<div class="container">
-    <h3>{{ request.user.username }}</h3>
-</div>
+<div class="container my-3">
+    <!-- Welcome message and username -->
+    <h3 class="text-muted">Welcome, {{ request.user.username }}!</h3>
 
-<!-- Chat button to toggle the chat window -->
-<button id="chat-toggle" class="chat-toggle-btn">
-    Chat <span id="new-message-badge" class="new-message-badge" style="display: none;">New Message</span>
-</button>
+    <!-- Chat button to toggle the chat window -->
+    <button id="chat-toggle" class="chat-toggle-btn mt-3">
+        Chat <span id="new-message-badge" class="new-message-badge" style="display: none;">New Message</span>
+    </button>
+</div>
 
 <!-- Chat section (initially hidden) -->
 <div id="chat-container" class="chat-container" style="display: none;">
@@ -26,10 +27,11 @@
         {% csrf_token %}
         <textarea id="message-input" name="message" placeholder="Enter your message here" class="chat-input"></textarea><br>
         <button type="submit" class="chat-button">Send</button>
+        <button type="button" id="delete-chat" class="chat-delete-btn">Delete Chats</button> <!-- New Delete Chats button -->
     </form>
 </div>
 
-<!-- AJAX for refreshing messages without reloading the page -->
+<!-- AJAX for refreshing messages and deleting chat -->
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script>
     function loadMessages() {
@@ -62,46 +64,36 @@
     }
 
     function checkNewMessages() {
-    $.ajax({
-        url: "{% url 'get_messages' request.user.id %}",
-        method: 'GET',
-        success: function(data) {
-            let messages = JSON.parse(data.messages);
-            let unreadCount = 0;
+        $.ajax({
+            url: "{% url 'get_messages' request.user.id %}",
+            method: 'GET',
+            success: function(data) {
+                let messages = JSON.parse(data.messages);
+                let unreadCount = 0;
 
-            messages.forEach(function(message) {
-                // Count unread messages from admin
-                if (message.fields.sender != "{{ request.user.id }}" && !message.fields.read) {
-                    unreadCount++;
-                }
-            });
+                messages.forEach(function(message) {
+                    // Count unread messages from admin
+                    if (message.fields.sender != "{{ request.user.id }}" && !message.fields.read) {
+                        unreadCount++;
+                    }
+                });
 
-            // Show/hide the new message badge
-            let badge = document.getElementById('new-message-badge');
-            if (unreadCount > 0) {
-                if (!badge) {
-                    // Create and add the badge if it doesn't exist
-                    badge = document.createElement('span');
-                    badge.classList.add('new-message-badge');
-                    badge.innerText = 'New Message';
-                    document.getElementById('chat-toggle').appendChild(badge); // Append badge to the chat button
-                }
-            } else {
-                // Remove the badge if there are no new messages
-                if (badge) {
-                    badge.remove();
+                // Show/hide the new message badge
+                let badge = document.getElementById('new-message-badge');
+                if (unreadCount > 0) {
+                    badge.style.display = 'inline';  // Show badge
+                } else {
+                    badge.style.display = 'none';  // Hide badge
                 }
             }
-        }
-    });
-}
+        });
+    }
 
     // Load messages every 5 seconds and check for new messages
     setInterval(loadMessages, 5000);
     setInterval(checkNewMessages, 5000);
     loadMessages();  // Initial load
     checkNewMessages();  // Initial check for new messages
-
 
     // Toggle chat visibility
     document.getElementById('chat-toggle').addEventListener('click', function() {
@@ -131,6 +123,22 @@
                 success: function() {
                     messageInput.value = ''; // Clear input after sending
                     loadMessages(); // Refresh messages
+                }
+            });
+        }
+    });
+
+    // Handle chat deletion
+    document.getElementById('delete-chat').addEventListener('click', function() {
+        if (confirm('Are you sure you want to delete all your chats?')) {
+            $.ajax({
+                url: "{% url 'delete_chats' %}",  // Use the appropriate URL for deleting chats
+                method: 'POST',
+                data: {
+                    'csrfmiddlewaretoken': '{{ csrf_token }}'
+                },
+                success: function() {
+                    loadMessages();  // Reload messages after deletion (it will be empty)
                 }
             });
         }
@@ -205,6 +213,21 @@
         background-color: #0056b3;
     }
 
+    /* Delete button styling */
+    .chat-delete-btn {
+        background-color: #dc3545;
+        color: #fff;
+        padding: 10px 20px;
+        border: none;
+        border-radius: 10px;
+        cursor: pointer;
+        margin-left: 10px;
+    }
+
+    .chat-delete-btn:hover {
+        background-color: #c82333;
+    }
+
     /* Chat toggle button styling */
     .chat-toggle-btn {
         background-color: #28a745;
@@ -213,7 +236,6 @@
         border: none;
         border-radius: 10px;
         cursor: pointer;
-        margin-bottom: 15px;
         font-size: 16px;
     }
 
@@ -229,6 +251,11 @@
         border-radius: 50px;
         font-size: 12px;
         margin-left: 10px;
+    }
+
+    /* Add margin-top for spacing between the username and the chat button */
+    .mt-3 {
+        margin-top: 20px;
     }
 </style>
 {% endblock %}

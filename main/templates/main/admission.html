@@ -1,6 +1,7 @@
 {% extends 'main/base.html' %}
 
 {% load static %}
+{% load widget_tweaks %}
 
 {% block title %} Admission Form {% endblock %}
 
@@ -54,33 +55,33 @@
                 <div class="row mb-3">
                     <div class="col-md-6">
                         <label for="first_name">First Name</label>
-                        {{ form.first_name }}
+                        {% render_field form.first_name class+="form-control" %}
                     </div>
                     <div class="col-md-6">
                         <label for="last_name">Last Name</label>
-                        {{ form.last_name }}
+                        {% render_field form.last_name class+="form-control" %}
                     </div>
                 </div>
 
                 <div class="row mb-3">
                     <div class="col-md-6">
                         <label for="date_of_birth">Date of Birth</label>
-                        {{ form.date_of_birth }}
+                        {% render_field form.date_of_birth class+="form-control" %}
                     </div>
                     <div class="col-md-6">
                         <label for="gender">Gender</label>
-                        {{ form.gender }}
+                        {% render_field form.gender class+="form-control" %}
                     </div>
                 </div>
 
                 <div class="row mb-3">
                     <div class="col-md-6">
                         <label for="applying_class">Class Applying For</label>
-                        {{ form.applying_class }}
+                        {% render_field form.applying_class class+="form-control" %}
                     </div>
                     <div class="col-md-6">
                         <label for="previous_school">Previous School (if applicable)</label>
-                        {{ form.previous_school }}
+                        {% render_field form.previous_school class+="form-control" %}
                     </div>
                 </div>
 
@@ -89,28 +90,28 @@
                 <div class="row mb-3">
                     <div class="col-md-6">
                         <label for="parent_first_name">Parent First Name</label>
-                        {{ form.parent_first_name }}
+                        {% render_field form.parent_first_name class+="form-control" %}
                     </div>
                     <div class="col-md-6">
                         <label for="parent_last_name">Parent Last Name</label>
-                        {{ form.parent_last_name }}
+                        {% render_field form.parent_last_name class+="form-control" %}
                     </div>
                 </div>
 
                 <div class="row mb-3">
                     <div class="col-md-6">
                         <label for="parent_phone">Phone Number</label>
-                        {{ form.parent_phone }}
+                        {% render_field form.parent_phone class+="form-control" %}
                     </div>
                     <div class="col-md-6">
                         <label for="parent_email">Email Address</label>
-                        {{ form.parent_email }}
+                        {% render_field form.parent_email class+="form-control" %}
                     </div>
                 </div>
 
                 <div class="mb-3">
                     <label for="home_address">Home Address</label>
-                    {{ form.home_address }}
+                    {% render_field form.home_address class+="form-control" %}
                 </div>
 
                 <!-- Emergency Contact Section -->
@@ -118,11 +119,11 @@
                 <div class="row mb-3">
                     <div class="col-md-6">
                         <label for="emergency_contact_name">Emergency Contact Name</label>
-                        {{ form.emergency_contact_name }}
+                        {% render_field form.emergency_contact_name class+="form-control" %}
                     </div>
                     <div class="col-md-6">
                         <label for="emergency_contact_phone">Emergency Contact Phone Number</label>
-                        {{ form.emergency_contact_phone }}
+                        {% render_field form.emergency_contact_phone class+="form-control" %}
                     </div>
                 </div>
 

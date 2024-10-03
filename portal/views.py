@@ -2,6 +2,8 @@ from django.http import HttpResponse
 from django.shortcuts import render,redirect
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
+from django.shortcuts import get_object_or_404
+from django.views.decorators.csrf import csrf_exempt
 from .models import Message
 from django.contrib.auth import authenticate,login,logout
 from django.http import JsonResponse
@@ -32,6 +34,17 @@ def portal(request):
         'messages': messages,
         'unread_count': unread_count,  # Pass unread count to the template
     })
+
+@login_required
+def delete_chats(request):
+    if request.method == 'POST':
+        admin_user = User.objects.get(is_superuser=True)
+        # Delete all messages between the user and the admin
+        Message.objects.filter(sender=request.user, receiver=admin_user).delete()
+        Message.objects.filter(sender=admin_user, receiver=request.user).delete()
+        return JsonResponse({'status': 'success'})
+    
+    return JsonResponse({'status': 'error'}, status=403)
 
 def register(request):
     if request.method == 'POST':
@@ -74,30 +87,55 @@ def logoutUser(request):
     logout(request)
     return redirect('home')
 
-# views.py
+
 
 @login_required
 def admin_conversations(request):
     if not request.user.is_superuser:
-        return redirect('home')  # Restrict access to admin
+        return redirect('home')
 
-    # Get distinct users who have sent messages to the admin
+    # Get users who have sent messages to the admin
     users = User.objects.filter(sent_messages__receiver=request.user).distinct()
 
-    # Check for unread messages from each user
     users_with_unread = {}
     for user in users:
         unread_count = Message.objects.filter(sender=user, receiver=request.user, read=False).count()
         users_with_unread[user.id] = unread_count
 
-    # Check if the request is an AJAX request by inspecting headers
+    # If it's an AJAX request, return the list of users and their unread counts
     if request.headers.get('x-requested-with') == 'XMLHttpRequest':
-        return JsonResponse({'users_with_unread': users_with_unread})
+        return JsonResponse({
+            'users': list(users.values()),
+            'users_with_unread': users_with_unread
+        })
 
     return render(request, 'portal/admin_conversations.html', {
         'users': users,
         'users_with_unread': users_with_unread,
     })
+
+
+@csrf_exempt
+@login_required
+def delete_conversation(request):
+    if request.method == 'POST' and request.user.is_superuser:
+        user_id = request.POST.get('user_id')
+        user = User.objects.get(id=user_id)
+        # Assuming Message is the model for chat messages
+        Message.objects.filter(sender=user, receiver=request.user).delete()
+        return JsonResponse({'status': 'success'})
+
+    return JsonResponse({'status': 'error'}, status=403)
+
+
+def check_new_users(request):
+    """Function to check for new users who have sent messages."""
+    if request.user.is_superuser:
+        new_users = User.objects.filter(sent_messages__receiver=request.user).exclude(id__in=users)
+        new_users_list = [{'id': user.id, 'username': user.username} for user in new_users]
+        return JsonResponse({'new_users': new_users_list})
+    return JsonResponse({'new_users': []})
+
 
 @login_required
 def admin_chat(request, user_id):
@@ -122,7 +160,6 @@ def admin_chat(request, user_id):
             return redirect('admin_chat', user_id=user.id)
 
     return render(request, 'portal/admin_chat.html', {'messages': messages, 'user': user})
-
 @login_required
 def get_messages(request, user_id=None):
     admin_user = request.user if request.user.is_superuser else User.objects.get(is_superuser=True)

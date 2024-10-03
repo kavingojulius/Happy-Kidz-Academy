@@ -28,6 +28,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'main',
     'portal',
+    'widget_tweaks',
 ]
 
 MIDDLEWARE = [

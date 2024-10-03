@@ -20,17 +20,19 @@
                         {% endif %}
                     </div>
                 </a>
+                <!-- Delete button for each user -->
+                <button class="delete-btn" data-user-id="{{ user.id }}">Delete Conversation</button>
             </div>
         {% endfor %}
     </div>
 </div>
 
-<!-- AJAX for refreshing new message indicators -->
+<!-- AJAX for refreshing new message indicators and deleting conversations -->
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script>
     function checkNewMessages() {
         $.ajax({
-            url: "{% url 'admin_conversations' %}",  // AJAX call to the same view
+            url: "{% url 'admin_conversations' %}",
             method: 'GET',
             success: function(data) {
                 const usersWithUnread = data.users_with_unread;
@@ -62,14 +64,31 @@
         });
     }
 
-    
+    // Delete conversation handler
+    $(document).on('click', '.delete-btn', function() {
+        const userId = $(this).data('user-id');
+        
+        if (confirm("Are you sure you want to delete the conversation with this user?")) {
+            $.ajax({
+                url: "{% url 'delete_conversation' %}",
+                method: 'POST',
+                data: {
+                    'user_id': userId,
+                    'csrfmiddlewaretoken': '{{ csrf_token }}'
+                },
+                success: function() {
+                    $('#user-' + userId).remove();  // Remove user card on success
+                }
+            });
+        }
+    });
+
     // Check for new messages every 5 seconds
     setInterval(checkNewMessages, 5000);
     checkNewMessages();  // Initial check
 </script>
 
 <style>
-    /* Styling the conversations page */
     .conversations {
         display: flex;
         flex-wrap: wrap;
@@ -106,6 +125,20 @@
         position: absolute;
         top: 10px;
         right: 10px;
+    }
+
+    .delete-btn {
+        margin-top: 10px;
+        padding: 5px 10px;
+        background-color: #dc3545;
+        color: #fff;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+    }
+
+    .delete-btn:hover {
+        background-color: #c82333;
     }
 
     .user-card a {
