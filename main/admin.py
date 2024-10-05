@@ -15,5 +15,5 @@ admin.site.register(Event, EventAdmin)
 
 admin.site.register(LandingPageText)
 admin.site.register(StudentAdmission)
-
+admin.site.register(News)
 

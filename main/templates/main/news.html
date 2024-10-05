@@ -5,7 +5,56 @@
 {% block title %} News Page {% endblock %}
 
 {% block content %}
+    <style>
+        .card:hover{
+            cursor: pointer;
+        }
+    </style>
 
+    <section class="container my-5">
+        <h2 class="mb-4">Latest News</h2>
+        <div class="row">
+            {% for news in news_items %}
+            <div class="col-md-6 col-lg-3 mb-4">
+                <div class="card h-100" data-toggle="modal" data-target="#newsModal{{ news.id }}" >
+                    <img src="{{ news.image.url }}" class="card-img-top" alt="News image">
+                    <div class="card-body">
+                        <h5 class="card-title">{{ news.title }}</h5>
+                        <p class="card-text">{{ news.description|truncatewords:15 }}</p>
+                    </div>
+                    <div class="card-footer text-muted">
+                        {{ news.date|date:"d F Y" }}
+                    </div>
+                </div>
+            </div>
 
+            <!-- Modal for displaying full news details -->
+            <div class="modal fade" id="newsModal{{ news.id }}" tabindex="-1" aria-labelledby="newsModalLabel{{ news.id }}" aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="newsModalLabel{{ news.id }}">{{ news.title }}</h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <div class="modal-body">
+                            <img src="{{ news.image.url }}" class="img-fluid mb-3" alt="News image">
+                            <p>{{ news.description }}</p>
+                        </div>
+                        <div class="modal-footer">
+                            <span class="text-muted">{{ news.date|date:"d F Y" }}</span>
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </section>
+    
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 
 {% endblock %}

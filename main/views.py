@@ -31,8 +31,9 @@ def visionmission(request):
     return render(request, 'main/vision_mission.html')
 
 def news(request):
+    news_items = News.objects.all().order_by('-date')
 
-    return render(request, 'main/news.html')
+    return render(request, 'main/news.html', {'news_items': news_items})
 
 def events(request):
 

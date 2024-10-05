@@ -89,3 +89,13 @@ class StudentAdmission(models.Model):
 
     def __str__(self):
         return f"{self.first_name} {self.last_name} - {self.applying_class}"
+    
+class News(models.Model):
+    title = models.CharField(max_length=255)
+    description = models.TextField()
+    image = models.ImageField(upload_to='news_images/')
+    date = models.DateField(auto_now_add=True)
+    
+    def __str__(self):
+        return self.title
+
