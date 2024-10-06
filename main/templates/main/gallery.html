@@ -7,36 +7,55 @@
 {% block content %}
 
 <!-- Classes Start -->
-    <div class="container-xxl py-5">
+    <div class="container-xxl py-5" style="background-color: #e6d8cd;">
         <div class="container">
             <div class="text-center mx-auto mb-5 wow fadeInUp" data-wow-delay="0.1s" style="max-width: 600px;">
                 <h1 class="mb-3">View our Gallery</h1>
                 <p>Eirmod sed ipsum dolor sit rebum labore magna erat. Tempor ut dolore lorem kasd vero ipsum sit eirmod sit. Ipsum diam justo sed rebum vero dolor duo.</p>
             </div>
             <div class="row g-4">
-                {% for images in gallery %}
-                <div class="col-lg-4 col-md-6 wow fadeInUp" data-wow-delay="0.1s">
-                    <div class="classes-item">
-                        <div class="bg-light w-90 mx-auto p-3">
-                            <img class="img-fluid" src="{{images.image.url}}" alt="">
-                        </div>
-                        <div class="bg-light rounded p-4 pt-5 mt-n5">
-                            <a class="d-block text-center h3 mt-3 mb-4" href="">{{images.title}}</a>                            
-                        </div>
-                    </div>
-                </div>
-                {% endfor %}
+                <!-- Gallery Cards -->
+{% for images in gallery %}
+<div class="col-lg-4 col-md-6 wow fadeInUp" data-wow-delay="0.1s" style="border-radius: 15px; overflow: hidden;">
+    <!-- Trigger for Modal -->
+    <div class="classes-item h-100 d-flex flex-column" data-bs-toggle="modal" data-bs-target="#modal-{{ forloop.counter }}" style="cursor: pointer;">
+        <div class="w-100 h-100 d-flex flex-column" style="border-radius: 15px;">
+            <!-- Image Section -->
+            <div class="bg-light p-3" style="border-radius: 15px 15px 0 0;">
+                <img class="img-fluid" src="{{ images.image.url }}" alt="{{ images.title }}" style="border-radius: 10px;">
+            </div>
 
-                <!-- <div class="col-lg-4 col-md-6 wow fadeInUp" data-wow-delay="0.1s">
-                    <div class="classes-item">
-                        <div class="bg-light  w-90 mx-auto p-3">
-                            <img class="img-fluid " src="{% static 'media/classes-1.jpg' %}" alt="">
-                        </div>
-                        <div class="bg-light rounded p-4 pt-5 mt-n5">
-                            <a class="d-block text-center h3 mt-3 mb-4" href="">Art & Drawing</a>                            
-                        </div>
-                    </div>
-                </div>
+            <!-- Content Section -->
+            <div class="bg-light p-4 pt-5 mt-n5 flex-grow-1 d-flex justify-content-center align-items-center" style="border-radius: 0 0 15px 15px;">
+                <a class="d-block text-center h3 mt-3 mb-4" href="#">{{ images.title }}</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal for each card -->
+<div class="modal fade" id="modal-{{ forloop.counter }}" tabindex="-1" aria-labelledby="modalLabel-{{ forloop.counter }}" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="modalLabel-{{ forloop.counter }}">{{ images.title }}</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <img src="{{ images.image.url }}" class="img-fluid mb-3" alt="{{ images.title }}">
+                <p>{{ images.description }}</p>
+                <!-- Add any additional details you want to display in the modal -->
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+{% endfor %}
+
+                 
+                <!--
 
                 <div class="col-lg-4 col-md-6 wow fadeInUp" data-wow-delay="0.1s">
                     <div class="classes-item">
