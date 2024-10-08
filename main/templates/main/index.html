@@ -20,8 +20,8 @@
                         <div class="row justify-content-start">
                             {% for items in landing_page_text %}
                             <div class="col-10 col-lg-8">
-                                <h1 class="display-6 text-white animated slideInDown mb-4">{{items.title}}</h1>
-                                <p class="fs-5 fw-medium text-white mb-4 pb-2">{{items.description}}.</p>
+                                <h3 class=" text-white animated slideInDown mb-4">{{items.title}}</h3>
+                                <p class="fs-6 fw-medium text-white mb-4 pb-2">{{items.description}}.</p>
                                 <a href="#" class="btn btn-primary rounded-pill py-sm-3 px-sm-5 me-3 animated slideInLeft">Learn More</a>
                                 <a href="#" class="btn btn-dark rounded-pill py-sm-3 px-sm-5 animated slideInRight">Our Classes</a>
                             </div>
@@ -36,214 +36,205 @@
 
 
     <!-- Events start -->
-<!-- Events Carousel -->
-<div id="eventCarousel" class="carousel slide" data-bs-ride="carousel" data-bs-interval="8000"> <!-- Set to 8 seconds -->
-    <div class="carousel-inner">
-        <!-- Check if events exist -->
-        {% if events %}
-            {% for event in events %}
-                <div class="carousel-item {% if forloop.first %}active{% endif %} smooth-scroll">
-                    <!-- Single event content -->
-                    <div class="container my-5 py-5 bg-secondary text-white position-relative rounded">
-                        <!-- Event Header -->
-                        <div class="position-absolute top-0 start-50" style="transform: translate(-50%, -50%);">
-                            <button class="btn btn-secondary rounded-pill text-white fw-bold p-3 fs-4" style="font-style: oblique;">
-                                Upcoming Event
-                            </button>
-                        </div>
+        <!-- Events Carousel -->
+            <div id="eventCarousel" class="carousel slide" data-bs-ride="carousel" data-bs-interval="8000"> <!-- Set to 8 seconds -->
+                <div class="carousel-inner">
+                    <!-- Check if events exist -->
+                    {% if events %}
+                        {% for event in events %}
+                            <div class="carousel-item {% if forloop.first %}active{% endif %} smooth-scroll">
+                                <!-- Single event content -->
+                                <div class="container my-5 py-5 bg-secondary text-white position-relative rounded">
+                                    <!-- Event Header -->
+                                    <div class="position-absolute top-0 start-50" style="transform: translate(-50%, -50%);">
+                                        <button class="btn btn-secondary rounded-pill text-white fw-bold p-3 fs-6" style="font-style: oblique;">
+                                            Upcoming Event
+                                        </button>
+                                    </div>
 
-                        <div class="row g-5 align-items-center">
-                            <!-- Event Image -->
-                            <div class="col-md-6">
-                                <img src="{{ event.image.url }}" class="img-fluid rounded w-100 h-100" alt="Event Image" style="object-fit: cover;">
-                            </div>
+                                    <div class="row g-5 align-items-center">
+                                        <!-- Event Image -->
+                                        <div class="col-md-6">
+                                            <img src="{{ event.image.url }}" class="img-fluid rounded w-100 h-100" alt="Event Image" style="object-fit: cover;">
+                                        </div>
 
-                            <!-- Event Details -->
-                            <div class="col-md-6">
-                                <div class="d-flex mb-3">
-                                    <div class="text-center me-4">
-                                        <div class="display-6" id="days-{{ forloop.counter0 }}">00</div>
-                                        <div>Days</div>
+                                        <!-- Event Details -->
+                                        <div class="col-md-6">
+                                            <div class="d-flex mb-3">
+                                                <div class="text-center me-4">
+                                                    <div class="fs-4 fw-bold" id="days-{{ forloop.counter0 }}">00</div>
+                                                    <div>Days</div>
+                                                </div>
+                                                <div class="text-center me-4">
+                                                    <div class="fs-4 fw-bold" id="hours-{{ forloop.counter0 }}">00</div>
+                                                    <div>Hr</div>
+                                                </div>
+                                                <div class="text-center me-4">
+                                                    <div class="fs-4 fw-bold" id="minutes-{{ forloop.counter0 }}">00</div>
+                                                    <div>Min</div>
+                                                </div>
+                                                <div class="text-center">
+                                                    <div class="fs-4 fw-bold" id="seconds-{{ forloop.counter0 }}">00</div>
+                                                    <div>Sec</div>
+                                                </div>
+                                                <span class="ms-3 align-self-center fs-5" style="font-style:italic;">Remaining</span>
+                                            </div>
+                                            
+
+                                            <h3 class="fw-bold">{{ event.title }}</h3>
+                                            <p class="fs-6">{{ event.content }}</p>
+                                            <a href="{% url 'events' %}" class="btn btn-outline-light fw-bold">View all events</a>
+                                        </div>
                                     </div>
-                                    <div class="text-center me-4">
-                                        <div class="display-6" id="hours-{{ forloop.counter0 }}">00</div>
-                                        <div>Hr</div>
-                                    </div>
-                                    <div class="text-center me-4">
-                                        <div class="display-6" id="minutes-{{ forloop.counter0 }}">00</div>
-                                        <div>Min</div>
-                                    </div>
-                                    <div class="text-center">
-                                        <div class="display-6" id="seconds-{{ forloop.counter0 }}">00</div>
-                                        <div>Sec</div>
-                                    </div>
-                                    <span class="ms-3 align-self-center fs-5 fw-bold">Remaining</span>
                                 </div>
-                                
-
-                                <h2 class="fw-bold">{{ event.title }}</h2>
-                                <p class="fs-5">{{ event.content }}</p>
-                                <a href="{% url 'events' %}" class="btn btn-outline-light fw-bold">View all events</a>
+                            </div>
+                        {% endfor %}
+                    {% else %}
+                        <!-- No events fallback -->
+                        <div class="carousel-item active">
+                            <div class="container my-5 py-5 bg-secondary text-white position-relative rounded">
+                                <h2 class="fw-bold text-center">No events</h2>
                             </div>
                         </div>
-                    </div>
+                    {% endif %}
                 </div>
-            {% endfor %}
-        {% else %}
-            <!-- No events fallback -->
-            <div class="carousel-item active">
-                <div class="container my-5 py-5 bg-secondary text-white position-relative rounded">
-                    <h2 class="fw-bold text-center">No events</h2>
-                </div>
+
+                <!-- Carousel Controls -->
+                <button class="carousel-control-prev custom-carousel-control" type="button" data-bs-target="#eventCarousel" data-bs-slide="prev">
+                    <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                    <span class="visually-hidden">Previous</span>
+                </button>
+                <button class="carousel-control-next custom-carousel-control" type="button" data-bs-target="#eventCarousel" data-bs-slide="next">
+                    <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                    <span class="visually-hidden">Next</span>
+                </button>
+
             </div>
-        {% endif %}
-    </div>
 
-    <!-- Carousel Controls -->
-    <button class="carousel-control-prev custom-carousel-control" type="button" data-bs-target="#eventCarousel" data-bs-slide="prev">
-        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-        <span class="visually-hidden">Previous</span>
-    </button>
-    <button class="carousel-control-next custom-carousel-control" type="button" data-bs-target="#eventCarousel" data-bs-slide="next">
-        <span class="carousel-control-next-icon" aria-hidden="true"></span>
-        <span class="visually-hidden">Next</span>
-    </button>
+        <!-- Custom Styles -->
 
-</div>
-
-<!-- Custom Styles -->
-
-<style>
-    .custom-carousel-control {
-        background-color: orange;
-        width: 50px; /* Reduce width */
-        height: 50px; /* Reduce height */
-        border-radius: 50%; /* Make it circular */
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        position: absolute;
-        top: 50%; /* Center vertically */
-        transform: translateY(-50%); /* Adjust for perfect centering */
-    }
-    
-    /* Make the control icons smaller */
-    .carousel-control-prev-icon,
-    .carousel-control-next-icon {
-        background-size: 50%;
-    }
-
-    /* Position previous and next buttons properly */
-    .carousel-control-prev {
-        left: 10px; /* Adjust to your preference */
-    }
-
-    .carousel-control-next {
-        right: 10px; /* Adjust to your preference */
-    }
-    .carousel-item img {
-        max-height: 300px; /* Set a max height for the images */
-        width: auto;       /* Maintain aspect ratio */
-        object-fit: cover; /* Cover the area without stretching */
-    }
-    
-
-    /* Smooth transition effect */
-    .smooth-scroll {
-        transition: transform 2s ease-in-out; /* Adjust duration and timing function */
-    }
-</style>
-
-<!-- JavaScript for Smooth Scroll Effect and Autoplay -->
-<script>
-    document.addEventListener('DOMContentLoaded', function () {
-        var carousel = document.querySelector('#eventCarousel');
-        var carouselItems = carousel.querySelectorAll('.carousel-item');
-        var currentIndex = 0; // Track the current index
-
-        // Autoplay function
-        function autoplayCarousel() {
-            setInterval(function() {
-                // Calculate the next index
-                currentIndex = (currentIndex + 1) % carouselItems.length; // Loop back to first item
-                var nextItem = carouselItems[currentIndex];
-                
-                // Use Bootstrap's carousel methods to slide to the next item
-                var carouselInstance = bootstrap.Carousel.getInstance(carousel);
-                carouselInstance.to(currentIndex); // Slide to the next item
-            }, 8000); // 8 seconds
-        }
-
-        // Start autoplay
-        autoplayCarousel();
-
-        // Existing slide event listener for smooth transition
-        carousel.addEventListener('slide.bs.carousel', function (event) {
-            var nextItem = carouselItems[event.to];
-
-            // Apply the smooth scroll effect
-            if (nextItem) {
-                nextItem.style.transform = 'translateY(0)'; // Reset position
-            }
-
-            // Reset the transform on the items after transition
-            setTimeout(() => {
-                carouselItems.forEach(item => {
-                    item.style.transform = ''; // Clear styles after transition
-                });
-            }, 500); // Match this with your transition duration
-        });
-    });
-</script>
-
-
-
-
-
-
-    <!-- Events end -->
-
-
-
-    <!-- JavaScript Countdown -->
-    <script>
-        // Event end timestamps from Django view
-        var eventEndTimestamps = {{ event_end_timestamps|safe }}.map(ts => ts * 1000); // Convert to milliseconds
-    
-        // Function to calculate remaining time and update the HTML
-        function updateCountdown() {
-            var now = new Date().getTime(); // Current time in milliseconds
-    
-            eventEndTimestamps.forEach((eventEndTimestamp, index) => {
-                var timeRemaining = eventEndTimestamp - now;
-    
-                // Update only if the element exists
-                if (timeRemaining > 0) {
-                    var days = Math.floor(timeRemaining / (1000 * 60 * 60 * 24));
-                    var hours = Math.floor((timeRemaining % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-                    var minutes = Math.floor((timeRemaining % (1000 * 60 * 60)) / (1000 * 60));
-                    var seconds = Math.floor((timeRemaining % (1000 * 60)) / 1000);
-    
-                    document.getElementById(`days-${index}`).innerHTML = days;
-                    document.getElementById(`hours-${index}`).innerHTML = hours;
-                    document.getElementById(`minutes-${index}`).innerHTML = minutes;
-                    document.getElementById(`seconds-${index}`).innerHTML = seconds;
-                } else {
-                    // Handle countdown completion for this specific event
-                    document.querySelector(`#event-${index}`).innerHTML = '<h2 class="fw-bold text-center">Event Ended</h2>';
+            <style>
+                .custom-carousel-control {
+                    background-color: orange;
+                    width: 50px; /* Reduce width */
+                    height: 50px; /* Reduce height */
+                    border-radius: 50%; /* Make it circular */
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    position: absolute;
+                    top: 50%; /* Center vertically */
+                    transform: translateY(-50%); /* Adjust for perfect centering */
                 }
-            });
-        }
-    
-        // Update the countdown every 1 second
-        setInterval(updateCountdown, 1000);
-    
-        // Run the function immediately so that the time shows right away
-        updateCountdown();
-    </script>
-    
+                
+                /* Make the control icons smaller */
+                .carousel-control-prev-icon,
+                .carousel-control-next-icon {
+                    background-size: 50%;
+                }
 
-    
+                /* Position previous and next buttons properly */
+                .carousel-control-prev {
+                    left: 10px; /* Adjust to your preference */
+                }
+
+                .carousel-control-next {
+                    right: 10px; /* Adjust to your preference */
+                }
+                .carousel-item img {
+                    max-height: 300px; /* Set a max height for the images */
+                    width: auto;       /* Maintain aspect ratio */
+                    object-fit: cover; /* Cover the area without stretching */
+                }
+                
+
+                /* Smooth transition effect */
+                .smooth-scroll {
+                    transition: transform 2s ease-in-out; /* Adjust duration and timing function */
+                }
+            </style>
+
+        <!-- JavaScript for Smooth Scroll Effect and Autoplay -->
+            <script>
+                document.addEventListener('DOMContentLoaded', function () {
+                    var carousel = document.querySelector('#eventCarousel');
+                    var carouselItems = carousel.querySelectorAll('.carousel-item');
+                    var currentIndex = 0; // Track the current index
+
+                    // Autoplay function
+                    function autoplayCarousel() {
+                        setInterval(function() {
+                            // Calculate the next index
+                            currentIndex = (currentIndex + 1) % carouselItems.length; // Loop back to first item
+                            var nextItem = carouselItems[currentIndex];
+                            
+                            // Use Bootstrap's carousel methods to slide to the next item
+                            var carouselInstance = bootstrap.Carousel.getInstance(carousel);
+                            carouselInstance.to(currentIndex); // Slide to the next item
+                        }, 8000); // 8 seconds
+                    }
+
+                    // Start autoplay
+                    autoplayCarousel();
+
+                    // Existing slide event listener for smooth transition
+                    carousel.addEventListener('slide.bs.carousel', function (event) {
+                        var nextItem = carouselItems[event.to];
+
+                        // Apply the smooth scroll effect
+                        if (nextItem) {
+                            nextItem.style.transform = 'translateY(0)'; // Reset position
+                        }
+
+                        // Reset the transform on the items after transition
+                        setTimeout(() => {
+                            carouselItems.forEach(item => {
+                                item.style.transform = ''; // Clear styles after transition
+                            });
+                        }, 500); // Match this with your transition duration
+                    });
+                });
+            </script>
+
+        <!-- Events end -->
+
+        <!-- JavaScript Countdown -->
+            <script>
+                // Event end timestamps from Django view
+                var eventEndTimestamps = {{ event_end_timestamps|safe }}.map(ts => ts * 1000); // Convert to milliseconds
+            
+                // Function to calculate remaining time and update the HTML
+                function updateCountdown() {
+                    var now = new Date().getTime(); // Current time in milliseconds
+            
+                    eventEndTimestamps.forEach((eventEndTimestamp, index) => {
+                        var timeRemaining = eventEndTimestamp - now;
+            
+                        // Update only if the element exists
+                        if (timeRemaining > 0) {
+                            var days = Math.floor(timeRemaining / (1000 * 60 * 60 * 24));
+                            var hours = Math.floor((timeRemaining % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+                            var minutes = Math.floor((timeRemaining % (1000 * 60 * 60)) / (1000 * 60));
+                            var seconds = Math.floor((timeRemaining % (1000 * 60)) / 1000);
+            
+                            document.getElementById(`days-${index}`).innerHTML = days;
+                            document.getElementById(`hours-${index}`).innerHTML = hours;
+                            document.getElementById(`minutes-${index}`).innerHTML = minutes;
+                            document.getElementById(`seconds-${index}`).innerHTML = seconds;
+                        } else {
+                            // Handle countdown completion for this specific event
+                            document.querySelector(`#event-${index}`).innerHTML = '<h2 class="fw-bold text-center">Event Ended</h2>';
+                        }
+                    });
+                }
+            
+                // Update the countdown every 1 second
+                setInterval(updateCountdown, 1000);
+            
+                // Run the function immediately so that the time shows right away
+                updateCountdown();
+            </script>
+
     <!-- Events end -->
     
 
@@ -252,7 +243,7 @@
     <div class="container">
     <div class="row g-5 align-items-center">
         <div class="col-lg-6 wow fadeInUp" data-wow-delay="0.1s">
-            <h1 class="mb-4">Welcome to Happy Kidz Academy</h1>
+            <h3 class="mb-4">Welcome to Happy Kidz Academy</h3>
             <p>Learn More About Our Work And Our Cultural Activities</p>
             <p class="mb-4">It's my pleasure to welcome you to Happy Kidz Academy. We are committed to providing your children with quality programs, activities, and services that will enhance and enrich your child's academic experience.</p>
             <div class="row g-4 align-items-center">
@@ -263,7 +254,7 @@
                     <div class="d-flex align-items-center">
                         <img class="rounded-circle flex-shrink-0" src="{% static 'media/user.jpg' %}" alt="" style="width: 45px; height: 45px;">
                         <div class="ms-3">
-                            <h6 class="text-primary mb-1">Jhon Doe</h6>
+                            <h6 class="text-primary mb-1">John Doe</h6>
                             <small>Head Teacher</small>
                         </div>
                     </div>
@@ -354,260 +345,7 @@
             </div>
         </div>
     </div>
-    <!-- Curriculum End -->
-
-    <!-- Classes Start -->
-    <!-- <div class="container-xxl py-5">
-        <div class="container">
-            <div class="text-center mx-auto mb-5 wow fadeInUp" data-wow-delay="0.1s" style="max-width: 600px;">
-                <h1 class="mb-3">School Classes</h1>
-                <p>Eirmod sed ipsum dolor sit rebum labore magna erat. Tempor ut dolore lorem kasd vero ipsum sit eirmod sit. Ipsum diam justo sed rebum vero dolor duo.</p>
-            </div>
-            <div class="row g-4">
-                <div class="col-lg-4 col-md-6 wow fadeInUp" data-wow-delay="0.1s">
-                    <div class="classes-item">
-                        <div class="bg-light rounded-circle w-75 mx-auto p-3">
-                            <img class="img-fluid rounded-circle" src="img/classes-1.jpg" alt="">
-                        </div>
-                        <div class="bg-light rounded p-4 pt-5 mt-n5">
-                            <a class="d-block text-center h3 mt-3 mb-4" href="">Art & Drawing</a>
-                            <div class="d-flex align-items-center justify-content-between mb-4">
-                                <div class="d-flex align-items-center">
-                                    <img class="rounded-circle flex-shrink-0" src="img/user.jpg" alt="" style="width: 45px; height: 45px;">
-                                    <div class="ms-3">
-                                        <h6 class="text-primary mb-1">Jhon Doe</h6>
-                                        <small>Teacher</small>
-                                    </div>
-                                </div>
-                                <span class="bg-primary text-white rounded-pill py-2 px-3" href="">$99</span>
-                            </div>
-                            <div class="row g-1">
-                                <div class="col-4">
-                                    <div class="border-top border-3 border-primary pt-2">
-                                        <h6 class="text-primary mb-1">Age:</h6>
-                                        <small>3-5 Years</small>
-                                    </div>
-                                </div>
-                                <div class="col-4">
-                                    <div class="border-top border-3 border-success pt-2">
-                                        <h6 class="text-success mb-1">Time:</h6>
-                                        <small>9-10 AM</small>
-                                    </div>
-                                </div>
-                                <div class="col-4">
-                                    <div class="border-top border-3 border-warning pt-2">
-                                        <h6 class="text-warning mb-1">Capacity:</h6>
-                                        <small>30 Kids</small>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-lg-4 col-md-6 wow fadeInUp" data-wow-delay="0.3s">
-                    <div class="classes-item">
-                        <div class="bg-light rounded-circle w-75 mx-auto p-3">
-                            <img class="img-fluid rounded-circle" src="img/classes-2.jpg" alt="">
-                        </div>
-                        <div class="bg-light rounded p-4 pt-5 mt-n5">
-                            <a class="d-block text-center h3 mt-3 mb-4" href="">Color Management</a>
-                            <div class="d-flex align-items-center justify-content-between mb-4">
-                                <div class="d-flex align-items-center">
-                                    <img class="rounded-circle flex-shrink-0" src="img/user.jpg" alt="" style="width: 45px; height: 45px;">
-                                    <div class="ms-3">
-                                        <h6 class="text-primary mb-1">Jhon Doe</h6>
-                                        <small>Teacher</small>
-                                    </div>
-                                </div>
-                                <span class="bg-primary text-white rounded-pill py-2 px-3" href="">$99</span>
-                            </div>
-                            <div class="row g-1">
-                                <div class="col-4">
-                                    <div class="border-top border-3 border-primary pt-2">
-                                        <h6 class="text-primary mb-1">Age:</h6>
-                                        <small>3-5 Years</small>
-                                    </div>
-                                </div>
-                                <div class="col-4">
-                                    <div class="border-top border-3 border-success pt-2">
-                                        <h6 class="text-success mb-1">Time:</h6>
-                                        <small>9-10 AM</small>
-                                    </div>
-                                </div>
-                                <div class="col-4">
-                                    <div class="border-top border-3 border-warning pt-2">
-                                        <h6 class="text-warning mb-1">Capacity:</h6>
-                                        <small>30 Kids</small>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-lg-4 col-md-6 wow fadeInUp" data-wow-delay="0.5s">
-                    <div class="classes-item">
-                        <div class="bg-light rounded-circle w-75 mx-auto p-3">
-                            <img class="img-fluid rounded-circle" src="img/classes-3.jpg" alt="">
-                        </div>
-                        <div class="bg-light rounded p-4 pt-5 mt-n5">
-                            <a class="d-block text-center h3 mt-3 mb-4" href="">Athletic & Dance</a>
-                            <div class="d-flex align-items-center justify-content-between mb-4">
-                                <div class="d-flex align-items-center">
-                                    <img class="rounded-circle flex-shrink-0" src="img/user.jpg" alt="" style="width: 45px; height: 45px;">
-                                    <div class="ms-3">
-                                        <h6 class="text-primary mb-1">Jhon Doe</h6>
-                                        <small>Teacher</small>
-                                    </div>
-                                </div>
-                                <span class="bg-primary text-white rounded-pill py-2 px-3" href="">$99</span>
-                            </div>
-                            <div class="row g-1">
-                                <div class="col-4">
-                                    <div class="border-top border-3 border-primary pt-2">
-                                        <h6 class="text-primary mb-1">Age:</h6>
-                                        <small>3-5 Years</small>
-                                    </div>
-                                </div>
-                                <div class="col-4">
-                                    <div class="border-top border-3 border-success pt-2">
-                                        <h6 class="text-success mb-1">Time:</h6>
-                                        <small>9-10 AM</small>
-                                    </div>
-                                </div>
-                                <div class="col-4">
-                                    <div class="border-top border-3 border-warning pt-2">
-                                        <h6 class="text-warning mb-1">Capacity:</h6>
-                                        <small>30 Kids</small>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-lg-4 col-md-6 wow fadeInUp" data-wow-delay="0.1s">
-                    <div class="classes-item">
-                        <div class="bg-light rounded-circle w-75 mx-auto p-3">
-                            <img class="img-fluid rounded-circle" src="img/classes-4.jpg" alt="">
-                        </div>
-                        <div class="bg-light rounded p-4 pt-5 mt-n5">
-                            <a class="d-block text-center h3 mt-3 mb-4" href="">Language & Speaking</a>
-                            <div class="d-flex align-items-center justify-content-between mb-4">
-                                <div class="d-flex align-items-center">
-                                    <img class="rounded-circle flex-shrink-0" src="img/user.jpg" alt="" style="width: 45px; height: 45px;">
-                                    <div class="ms-3">
-                                        <h6 class="text-primary mb-1">Jhon Doe</h6>
-                                        <small>Teacher</small>
-                                    </div>
-                                </div>
-                                <span class="bg-primary text-white rounded-pill py-2 px-3" href="">$99</span>
-                            </div>
-                            <div class="row g-1">
-                                <div class="col-4">
-                                    <div class="border-top border-3 border-primary pt-2">
-                                        <h6 class="text-primary mb-1">Age:</h6>
-                                        <small>3-5 Years</small>
-                                    </div>
-                                </div>
-                                <div class="col-4">
-                                    <div class="border-top border-3 border-success pt-2">
-                                        <h6 class="text-success mb-1">Time:</h6>
-                                        <small>9-10 AM</small>
-                                    </div>
-                                </div>
-                                <div class="col-4">
-                                    <div class="border-top border-3 border-warning pt-2">
-                                        <h6 class="text-warning mb-1">Capacity:</h6>
-                                        <small>30 Kids</small>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-lg-4 col-md-6 wow fadeInUp" data-wow-delay="0.3s">
-                    <div class="classes-item">
-                        <div class="bg-light rounded-circle w-75 mx-auto p-3">
-                            <img class="img-fluid rounded-circle" src="img/classes-5.jpg" alt="">
-                        </div>
-                        <div class="bg-light rounded p-4 pt-5 mt-n5">
-                            <a class="d-block text-center h3 mt-3 mb-4" href="">Religion & History</a>
-                            <div class="d-flex align-items-center justify-content-between mb-4">
-                                <div class="d-flex align-items-center">
-                                    <img class="rounded-circle flex-shrink-0" src="img/user.jpg" alt="" style="width: 45px; height: 45px;">
-                                    <div class="ms-3">
-                                        <h6 class="text-primary mb-1">Jhon Doe</h6>
-                                        <small>Teacher</small>
-                                    </div>
-                                </div>
-                                <span class="bg-primary text-white rounded-pill py-2 px-3" href="">$99</span>
-                            </div>
-                            <div class="row g-1">
-                                <div class="col-4">
-                                    <div class="border-top border-3 border-primary pt-2">
-                                        <h6 class="text-primary mb-1">Age:</h6>
-                                        <small>3-5 Years</small>
-                                    </div>
-                                </div>
-                                <div class="col-4">
-                                    <div class="border-top border-3 border-success pt-2">
-                                        <h6 class="text-success mb-1">Time:</h6>
-                                        <small>9-10 AM</small>
-                                    </div>
-                                </div>
-                                <div class="col-4">
-                                    <div class="border-top border-3 border-warning pt-2">
-                                        <h6 class="text-warning mb-1">Capacity:</h6>
-                                        <small>30 Kids</small>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-lg-4 col-md-6 wow fadeInUp" data-wow-delay="0.5s">
-                    <div class="classes-item">
-                        <div class="bg-light rounded-circle w-75 mx-auto p-3">
-                            <img class="img-fluid rounded-circle" src="img/classes-6.jpg" alt="">
-                        </div>
-                        <div class="bg-light rounded p-4 pt-5 mt-n5">
-                            <a class="d-block text-center h3 mt-3 mb-4" href="">General Knowledge</a>
-                            <div class="d-flex align-items-center justify-content-between mb-4">
-                                <div class="d-flex align-items-center">
-                                    <img class="rounded-circle flex-shrink-0" src="img/user.jpg" alt="" style="width: 45px; height: 45px;">
-                                    <div class="ms-3">
-                                        <h6 class="text-primary mb-1">Jhon Doe</h6>
-                                        <small>Teacher</small>
-                                    </div>
-                                </div>
-                                <span class="bg-primary text-white rounded-pill py-2 px-3" href="">$99</span>
-                            </div>
-                            <div class="row g-1">
-                                <div class="col-4">
-                                    <div class="border-top border-3 border-primary pt-2">
-                                        <h6 class="text-primary mb-1">Age:</h6>
-                                        <small>3-5 Years</small>
-                                    </div>
-                                </div>
-                                <div class="col-4">
-                                    <div class="border-top border-3 border-success pt-2">
-                                        <h6 class="text-success mb-1">Time:</h6>
-                                        <small>9-10 AM</small>
-                                    </div>
-                                </div>
-                                <div class="col-4">
-                                    <div class="border-top border-3 border-warning pt-2">
-                                        <h6 class="text-warning mb-1">Capacity:</h6>
-                                        <small>30 Kids</small>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div> -->
-    <!-- Classes End -->
+    <!-- Curriculum End -->    
 
     <!-- Admission section Start -->
     <div class="container-xxl py-5">
@@ -621,11 +359,11 @@
                     </div>
                     <div class="col-lg-6 wow fadeIn" data-wow-delay="0.5s">
                         <div class="h-100 d-flex flex-column justify-content-center p-5">
-                            <h1 class="mb-4">Book Admission</h1>
+                            <h3 class="mb-4">Book Admission</h3>
                             <p class="mb-4">Tempor erat elitr rebum at clita. Diam dolor diam ipsum sit. Aliqu diam amet diam et eos.
                                 Clita erat ipsum et lorem et sit, sed stet lorem sit clita duo justo magna dolore erat amet
                             </p>
-                            <a class="btn btn-primary py-3 px-5" href="">Book Now<i class="fa fa-arrow-right ms-2"></i></a>
+                            <a class="btn btn-primary py-3 px-5" href="{% url 'admission' %}">Book Now<i class="fa fa-arrow-right ms-2"></i></a>
                         </div>
                     </div>
                 </div>
@@ -642,7 +380,7 @@
                 <div class="row g-0">
                     <div class="col-lg-6 wow fadeIn" data-wow-delay="0.1s">
                         <div class="h-100 d-flex flex-column justify-content-center p-5">
-                            <h1 class="mb-4">Make Appointment</h1>
+                            <h3 class="mb-4">Make Appointment</h3>
                             <form>
                                 <div class="row g-3">
                                     <div class="col-sm-6">
@@ -683,9 +421,9 @@
                         </div>
                     </div>
                     <div class="col-lg-6 wow fadeIn d-flex flex-column justify-content-center" data-wow-delay="0.5s" style="">
-                        <div class="">
-                            <p class="display-6">Get to know the welfare of your child at school</p>
-                            <p class="fw-bold fs-5">Make an appointment with the school to see the environment at which you child learns</p>
+                        <div>
+                            <p class="fw-bold fs-4" style="font-style:italic;">Get to know the welfare of your child at school</p>
+                            <p class="fs-5">Make an appointment with the school to see the environment at which you child learns</p>
                             <!-- <img class="w-100 h-50 rounded" src="{% static 'media/appointment.jpg' %}" style="object-fit: cover;">                             -->
                         </div>
                     </div>
@@ -694,110 +432,5 @@
         </div>
     </div>
     <!-- Appointment End -->
-
-
-    <!-- Team Start -->
-    <!-- <div class="container-xxl py-5">
-        <div class="container">
-            <div class="text-center mx-auto mb-5 wow fadeInUp" data-wow-delay="0.1s" style="max-width: 600px;">
-                <h1 class="mb-3">Popular Teachers</h1>
-                <p>Eirmod sed ipsum dolor sit rebum labore magna erat. Tempor ut dolore lorem kasd vero ipsum sit
-                    eirmod sit. Ipsum diam justo sed rebum vero dolor duo.</p>
-            </div>
-            <div class="row g-4">
-                <div class="col-lg-4 col-md-6 wow fadeInUp" data-wow-delay="0.1s">
-                    <div class="team-item position-relative">
-                        <img class="img-fluid rounded-circle w-75" src="img/team-1.jpg" alt="">
-                        <div class="team-text">
-                            <h3>Full Name</h3>
-                            <p>Designation</p>
-                            <div class="d-flex align-items-center">
-                                <a class="btn btn-square btn-primary mx-1" href=""><i class="fab fa-facebook-f"></i></a>
-                                <a class="btn btn-square btn-primary  mx-1" href=""><i class="fab fa-twitter"></i></a>
-                                <a class="btn btn-square btn-primary  mx-1" href=""><i class="fab fa-instagram"></i></a>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-lg-4 col-md-6 wow fadeInUp" data-wow-delay="0.3s">
-                    <div class="team-item position-relative">
-                        <img class="img-fluid rounded-circle w-75" src="img/team-2.jpg" alt="">
-                        <div class="team-text">
-                            <h3>Full Name</h3>
-                            <p>Designation</p>
-                            <div class="d-flex align-items-center">
-                                <a class="btn btn-square btn-primary mx-1" href=""><i class="fab fa-facebook-f"></i></a>
-                                <a class="btn btn-square btn-primary  mx-1" href=""><i class="fab fa-twitter"></i></a>
-                                <a class="btn btn-square btn-primary  mx-1" href=""><i class="fab fa-instagram"></i></a>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-lg-4 col-md-6 wow fadeInUp" data-wow-delay="0.5s">
-                    <div class="team-item position-relative">
-                        <img class="img-fluid rounded-circle w-75" src="img/team-3.jpg" alt="">
-                        <div class="team-text">
-                            <h3>Full Name</h3>
-                            <p>Designation</p>
-                            <div class="d-flex align-items-center">
-                                <a class="btn btn-square btn-primary mx-1" href=""><i class="fab fa-facebook-f"></i></a>
-                                <a class="btn btn-square btn-primary  mx-1" href=""><i class="fab fa-twitter"></i></a>
-                                <a class="btn btn-square btn-primary  mx-1" href=""><i class="fab fa-instagram"></i></a>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div> -->
-    <!-- Team End -->
-
-
-    <!-- Testimonial Start -->
-    <!-- <div class="container-xxl py-5">
-        <div class="container">
-            <div class="text-center mx-auto mb-5 wow fadeInUp" data-wow-delay="0.1s" style="max-width: 600px;">
-                <h1 class="mb-3">Our Clients Say!</h1>
-                <p>Eirmod sed ipsum dolor sit rebum labore magna erat. Tempor ut dolore lorem kasd vero ipsum sit eirmod sit. Ipsum diam justo sed rebum vero dolor duo.</p>
-            </div>
-            <div class="owl-carousel testimonial-carousel wow fadeInUp" data-wow-delay="0.1s">
-                <div class="testimonial-item bg-light rounded p-5">
-                    <p class="fs-5">Tempor stet labore dolor clita stet diam amet ipsum dolor duo ipsum rebum stet dolor amet diam stet. Est stet ea lorem amet est kasd kasd erat eos</p>
-                    <div class="d-flex align-items-center bg-white me-n5" style="border-radius: 50px 0 0 50px;">
-                        <img class="img-fluid flex-shrink-0 rounded-circle" src="img/testimonial-1.jpg" style="width: 90px; height: 90px;">
-                        <div class="ps-3">
-                            <h3 class="mb-1">Client Name</h3>
-                            <span>Profession</span>
-                        </div>
-                        <i class="fa fa-quote-right fa-3x text-primary ms-auto d-none d-sm-flex"></i>
-                    </div>
-                </div>
-                <div class="testimonial-item bg-light rounded p-5">
-                    <p class="fs-5">Tempor stet labore dolor clita stet diam amet ipsum dolor duo ipsum rebum stet dolor amet diam stet. Est stet ea lorem amet est kasd kasd erat eos</p>
-                    <div class="d-flex align-items-center bg-white me-n5" style="border-radius: 50px 0 0 50px;">
-                        <img class="img-fluid flex-shrink-0 rounded-circle" src="img/testimonial-2.jpg" style="width: 90px; height: 90px;">
-                        <div class="ps-3">
-                            <h3 class="mb-1">Client Name</h3>
-                            <span>Profession</span>
-                        </div>
-                        <i class="fa fa-quote-right fa-3x text-primary ms-auto d-none d-sm-flex"></i>
-                    </div>
-                </div>
-                <div class="testimonial-item bg-light rounded p-5">
-                    <p class="fs-5">Tempor stet labore dolor clita stet diam amet ipsum dolor duo ipsum rebum stet dolor amet diam stet. Est stet ea lorem amet est kasd kasd erat eos</p>
-                    <div class="d-flex align-items-center bg-white me-n5" style="border-radius: 50px 0 0 50px;">
-                        <img class="img-fluid flex-shrink-0 rounded-circle" src="img/testimonial-3.jpg" style="width: 90px; height: 90px;">
-                        <div class="ps-3">
-                            <h3 class="mb-1">Client Name</h3>
-                            <span>Profession</span>
-                        </div>
-                        <i class="fa fa-quote-right fa-3x text-primary ms-auto d-none d-sm-flex"></i>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div> -->
-    <!-- Testimonial End -->
-
 
 {% endblock %}

@@ -7,7 +7,7 @@
 {% block content %}
 <div class="container my-3">
     <!-- Welcome message and username -->
-    <h3 class="text-muted">Welcome, {{ request.user.username }}!</h3>
+    <h4 class="text-muted">Welcome, {{ request.user.username }}!</h4>
 
     <div class="d-flex flex-column mt-3 col-md-3 col-lg-3" >
         <!-- style="width: 25%; margin-top: 20px;" -->
@@ -23,7 +23,7 @@
 
 <!-- Chat section (initially hidden) -->
 <div id="chat-container" class="chat-container" style="display: none;">
-    <h2>Chat with Admin</h2>
+    <h5>Chat with Admin</h5>
     
     <div id="chat-box" class="chat-box">
         <!-- Messages will be dynamically loaded here -->

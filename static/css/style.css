@@ -5,7 +5,7 @@
     --dark: #103741;
 }
 body{
-    font-size: 1.2rem;
+    font-size: 15px;
 }
 
 .back-to-top {
@@ -88,7 +88,7 @@ h6,
 
 /*** Navbar ***/
 .navbar{
-    padding: 30px;
+    padding: 20px;
 }
 
 .navbar-nav {
