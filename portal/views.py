@@ -2,10 +2,15 @@ from django.http import HttpResponse
 from django.shortcuts import render,redirect
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
-from django.shortcuts import get_object_or_404
 from django.views.decorators.csrf import csrf_exempt
+from django.utils.decorators import method_decorator
+from django.contrib.auth.forms import PasswordChangeForm
+from django.contrib.auth import update_session_auth_hash
+from django.contrib.auth.views import PasswordChangeView
 from .models import Message
-from django.contrib.auth import authenticate,login,logout
+from django.contrib import messages
+from django.urls import reverse_lazy
+from django.contrib.auth import authenticate, login, logout, update_session_auth_hash
 from django.http import JsonResponse
 from django.core import serializers
 
@@ -46,35 +51,37 @@ def delete_chats(request):
     
     return JsonResponse({'status': 'error'}, status=403)
 
-def register(request):
-    if request.method == 'POST':
-        first_name = request.POST.get('fname')
-        last_name = request.POST.get('lname')
-        uname = request.POST.get('username')
-        email = request.POST.get('email')
-        pass1 = request.POST.get('password')
-        pass2 = request.POST.get('password1')
+# def register(request):
+#     if request.method == 'POST':
+#         first_name = request.POST.get('fname')
+#         last_name = request.POST.get('lname')
+#         uname = request.POST.get('username')
+#         email = request.POST.get('email')
+#         pass1 = request.POST.get('password')
+#         pass2 = request.POST.get('password1')
 
-        if pass1!=pass2:
-            return render(request, 'portal/register.html', {'error': 'Passwords dont match'})
-        else:
-            my_user=User.objects.create_user(username=uname, email=email, password=pass1, first_name=first_name, last_name=last_name)
-            my_user.save()
-            return redirect('log_in')
-    return render(request, 'portal/register.html')
-
+#         if pass1!=pass2:
+#             return render(request, 'portal/register.html', {'error': 'Passwords dont match'})
+#         else:
+#             my_user=User.objects.create_user(username=uname, email=email, password=pass1, first_name=first_name, last_name=last_name)
+#             my_user.save()
+#             return redirect('log_in')
+#     return render(request, 'portal/register.html')
 
 def log_in(request):        
     if request.method == 'POST':        
-        email=request.POST.get('email')
+        # email=request.POST.get('email')
+        username=request.POST.get('username')
         pass1=request.POST.get('password1')
-        
-        try :
-            user_obj = User.objects.get(email=email)            
-            user=authenticate(request, username=user_obj.username, password=pass1)
-        except User.DoesNotExist:
-            user = None
-            
+    
+        # try :
+        #     user_obj = User.objects.get(email=email)            
+        #     user=authenticate(request, username=user_obj.username, password=pass1)
+        # except User.DoesNotExist:
+        #     user = None
+
+        user=authenticate(request, username=username, password=pass1)
+
         if user is not None:
             login(request,user)
             return redirect('portal')
@@ -87,6 +94,37 @@ def logoutUser(request):
     logout(request)
     return redirect('home')
 
+
+@login_required
+def change_password(request):
+    if request.method == 'POST':
+        form = PasswordChangeForm(request.user, request.POST)
+        if form.is_valid():
+            user = form.save()
+            update_session_auth_hash(request, user)  # Keep the user logged in after password change
+            messages.success(request, 'Your password has been changed successfully.')
+            return redirect('portal')  # Redirect back to the portal after success
+        else:
+            messages.error(request, 'Please correct the errors below.')
+    else:
+        form = PasswordChangeForm(request.user)
+    
+    return render(request, 'portal/change_password.html', {'form': form})
+
+# @login_required
+# def change_password(request):
+#     if request.method == 'POST':
+#         form = PasswordChangeForm(request.user, request.POST)
+#         if form.is_valid():
+#             user = form.save()
+#             update_session_auth_hash(request, user)  # Important to keep the user logged in
+#             messages.success(request, 'Your password has been changed successfully.')
+#             return JsonResponse({'message': 'Your password has been changed successfully.'})
+#         else:
+#             return JsonResponse({'message': 'Error changing password.'}, status=400)
+    
+#     form = PasswordChangeForm(request.user)
+#     return render(request, 'portal/change_password.html', {'form': form})
 
 
 @login_required

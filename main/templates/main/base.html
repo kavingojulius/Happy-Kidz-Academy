@@ -40,15 +40,32 @@
 
 
         <!-- Contact Info Start -->
-        <div class="contact-bar bg-light py-2" id="contactBar">
-            <div class="container-fluid d-flex justify-content-between">
-                <div>
-                    <i class="fa fa-envelope me-2"></i>info@happykidzacademy.com
-                    <i class="fa fa-phone ms-4 me-2"></i>0728 260082
-                </div>                
+            <div class="contact-bar bg-light py-2" id="contactBar">
+                <div class="container-fluid d-flex justify-content-center align-items-center">
+                    <div class="contact-info">
+                        <i class="fa fa-envelope me-2"></i>info@happykidzacademy.com
+                        <i class="fa fa-phone ms-4 me-2"></i>0728 260082
+                    </div>
+                </div>
             </div>
-        </div>
+
+            <style>
+                /* Default font size for larger screens */
+                .contact-info {
+                    font-size: 1rem; /* 16px */
+                }
+            
+                /* Media query to reduce font size on small screens */
+                @media (max-width: 576px) {
+                    .contact-info {
+                        font-size: 0.875rem; /* 14px */
+                    }
+                }
+            </style>
+            
         <!-- Contact Info End -->
+
+
 
         
         <!-- Navbar Start -->

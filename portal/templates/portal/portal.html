@@ -9,10 +9,16 @@
     <!-- Welcome message and username -->
     <h3 class="text-muted">Welcome, {{ request.user.username }}!</h3>
 
-    <!-- Chat button to toggle the chat window -->
-    <button id="chat-toggle" class="chat-toggle-btn mt-3">
-        Chat <span id="new-message-badge" class="new-message-badge" style="display: none;">New Message</span>
-    </button>
+    <div class="d-flex flex-column mt-3 col-md-3 col-lg-3" >
+        <!-- style="width: 25%; margin-top: 20px;" -->
+        <!-- Change Password Button -->
+        <a href="{% url 'change_password' %}" class="btn btn-primary mt-3">Change Password</a>
+
+        <!-- Chat button to toggle the chat window -->
+        <button id="chat-toggle" class="chat-toggle-btn mt-3">
+            Chat <span id="new-message-badge" class="new-message-badge" style="display: none;">New Message</span>
+        </button>
+    </div>
 </div>
 
 <!-- Chat section (initially hidden) -->

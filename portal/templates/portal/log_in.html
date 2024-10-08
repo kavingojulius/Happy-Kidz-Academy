@@ -26,8 +26,8 @@
                 {% csrf_token %}
     
                 <div class="col-12">
-                    <label for="email" class="form-label">Your Email</label>
-                    <input type="email" name="email" class="form-control" id="email" required>
+                    <label for="username" class="form-label">Your Username</label>
+                    <input type="text" name="username" class="form-control" id="username" placeholder="Enter username" required>
                     <div class="invalid-feedback">Please enter a valid Email adddress!</div>
                 </div>
 
@@ -37,13 +37,14 @@
                     <div class="invalid-feedback">Please enter your password!</div>
                 </div>
                 
-                <div class="col-12">                
+                <div class="col-12 mt-4">                
                     <button class="w-100 btn " type="submit" style="background-color: #006400; color: #fff;">sign in</button>
                 </div>
 
-                <div class="col-12 mt-4">
-                    <p class="small mb-0">Don't have an account? <a href="{% url 'register' %}">Sign Up</a></p>
-                </div>
+                <!-- <div class="col-12 mt-4">
+                    <p class="small mb-0">Don't have an account? <a href="">Sign Up</a></p>
+                </div> -->
+                
                 </form>
 
             </div>
